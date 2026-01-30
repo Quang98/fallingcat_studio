@@ -35,12 +35,13 @@ if(gameId){
     if(g){
       title.textContent=g.name;
       iframe.src='games/'+g.id+'/index.html';
-      let progress=0;
-      const interval=setInterval(()=>{
-        progress+=Math.random()*5;
-        if(progress>=100){progress=100;loading.style.width='100%';clearInterval(interval);document.getElementById('loadingBar').style.display='none';}
-        loading.style.width=progress+'%';
-      },100);
+    //   console.log(iframe.src); 
+    //   let progress=0;
+    //   const interval=setInterval(()=>{
+    //     progress+=Math.random()*5;
+    //     if(progress>=100){progress=100;loading.style.width='100%';clearInterval(interval);document.getElementById('loadingBar').style.display='none';}
+    //     loading.style.width=progress+'%';
+    //   },100);
     } else {title.textContent='Game không tồn tại';}
   });
 }else{title.textContent='Game không xác định';}

@@ -3,16 +3,16 @@
     "id": "wizarddungeon",
     "name": "Wizard Dungeon",
     "category": "Hành động",
-    "thumbnail": "https://via.placeholder.com/400x200?text=Wizard+Dungeon"
+    "thumbnail": "https://via.placeholder.com/400x200?text=Falling+Cat"
   },
   {
-    "id": "game2",
+    "id": "spacerunner",
     "name": "Space Runner",
     "category": "Phiêu lưu",
     "thumbnail": "https://via.placeholder.com/400x200?text=Space+Runner"
   },
   {
-    "id": "game3",
+    "id": "puzzlemaster",
     "name": "Puzzle Master",
     "category": "Puzzle",
     "thumbnail": "https://via.placeholder.com/400x200?text=Puzzle+Master"
