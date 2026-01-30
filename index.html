@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Falling Cat Studio</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 720px;
+            padding: 32px;
+        }
+
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            margin-bottom: 32px;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        a.button {
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 999px;
+            background: #ffcc00;
+            color: #000;
+            font-weight: 600;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        a.button.secondary {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.6);
+        }
+
+        a.button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+        }
+
+        footer {
+            margin-top: 48px;
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐱 Falling Cat Studio</h1>
+        <p>
+            Indie game studio.<br />
+            Chơi game trực tiếp trên trình duyệt – không cần tải.
+        </p>
+
+        <div class="buttons">
+            <!-- Link tới game Unity WebGL -->
+            <a class="button" href="./games/falling-cat/">▶ Play Game</a>
+
+            <!-- Link khác -->
+            <a class="button secondary" href="https://github.com/Quang98">
+                GitHub
+            </a>
+        </div>
+
+        <footer>
+            © 2026 Falling Cat Studio
+        </footer>
+    </div>
+</body>
+</html>
