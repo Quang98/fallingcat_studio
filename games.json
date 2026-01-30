@@ -1,0 +1,20 @@
+[
+  {
+    "id": "wizarddungeon",
+    "name": "Wizard Dungeon",
+    "category": "Hành động",
+    "thumbnail": "https://via.placeholder.com/400x200?text=Wizard+Dungeon"
+  },
+  {
+    "id": "game2",
+    "name": "Space Runner",
+    "category": "Phiêu lưu",
+    "thumbnail": "https://via.placeholder.com/400x200?text=Space+Runner"
+  },
+  {
+    "id": "game3",
+    "name": "Puzzle Master",
+    "category": "Puzzle",
+    "thumbnail": "https://via.placeholder.com/400x200?text=Puzzle+Master"
+  }
+]
