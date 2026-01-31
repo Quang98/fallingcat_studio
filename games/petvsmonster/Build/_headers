@@ -1,0 +1,3 @@
+/games/petvsmonster/Build/*.gz
+  Content-Encoding: gzip
+  Content-Type: application/wasm
