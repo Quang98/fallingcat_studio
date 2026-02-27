@@ -1,88 +1,421 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FallingCat Games</title>
-<style>
-:root{
-  --bg-main:#0f1115;
-  --bg-panel:#181b21;
-  --bg-card:#1f232b;
-  --accent:#ff6a00;
-  --text-main:#ffffff;
-  --text-sub:#a0a0a0;
-}
-*{box-sizing:border-box;margin:0;padding:0;font-family:Inter,Arial,sans-serif;}
-body{display:flex;height:100vh;background:var(--bg-main);color:var(--text-main);}
-.sidebar{width:220px;background:var(--bg-panel);padding:20px;display:flex;flex-direction:column;}
-.logo{font-size:22px;font-weight:bold;margin-bottom:30px;color:var(--accent);}
-.menu a{display:block;color:var(--text-main);text-decoration:none;padding:12px 10px;border-radius:8px;margin-bottom:6px;font-size:15px;}
-.menu a:hover{background:var(--bg-card);}
-.main{flex:1;padding:24px;overflow-y:auto;}
-.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;}
-.topbar h1{font-size:24px;}
-.search{background:var(--bg-card);border:none;padding:10px 14px;border-radius:10px;color:white;width:220px;}
-.game-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;}
-.game-card{background:var(--bg-card);border-radius:14px;overflow:hidden;cursor:pointer;transition:transform .2s ease,box-shadow .2s ease;}
-.game-card:hover{transform:translateY(-6px);box-shadow:0 10px 30px rgba(0,0,0,0.5);}
-.game-card img{width:100%;height:140px;object-fit:cover;background:#000;}
-.game-info{padding:14px;}
-.game-info h3{font-size:16px;margin-bottom:4px;}
-.game-info p{font-size:13px;color:var(--text-sub);}
-@media(max-width:768px){.sidebar{display:none;}}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITC Games</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-main: #0f1115;
+      --bg-panel: #15181d;
+      --bg-card: #1c2128;
+      --accent: #ff6a00;
+      --accent-glow: rgba(255, 106, 0, 0.3);
+      --text-main: #ffffff;
+      --text-sub: #9ca3af;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Inter, sans-serif;
+    }
+
+    body {
+      background: linear-gradient(180deg, #0f1115, #0b0d11);
+      color: var(--text-main);
+    }
+
+    /* ===== NAVBAR ===== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--bg-panel);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 40px;
+      border-bottom: 1px solid #222;
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .nav-menu {
+      display: flex;
+      gap: 26px;
+    }
+
+    .nav-menu a {
+      text-decoration: none;
+      color: var(--text-main);
+      font-size: 15px;
+      position: relative;
+      padding-bottom: 4px;
+      transition: all .2s ease;
+    }
+
+    .nav-menu a:hover {
+      color: var(--accent);
+    }
+
+    .nav-menu a.active::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .search {
+      background: var(--bg-card);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 30px;
+      color: white;
+      width: 220px;
+      outline: none;
+    }
+
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    /* ===== MAIN ===== */
+    .main {
+      padding: 40px;
+    }
+
+    /* HERO */
+    .hero {
+      height: 220px;
+      border-radius: 18px;
+      margin-bottom: 40px;
+      background: linear-gradient(135deg, #ff6a00, #ff9d00);
+      display: flex;
+      align-items: center;
+      padding: 30px;
+      box-shadow: 0 20px 60px var(--accent-glow);
+    }
+
+    .hero-content h2 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .hero-content p {
+      color: #111;
+      font-weight: 500;
+      margin-bottom: 18px;
+    }
+
+    .hero-content button {
+      background: #111;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    /* GAME GRID */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 22px;
+    }
+
+    .game-card {
+      background: var(--bg-card);
+      border-radius: 16px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+    }
+
+    .game-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    }
+
+    .game-card img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      background: #000;
+    }
+
+    .badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: var(--accent);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .game-info {
+      padding: 16px;
+    }
+
+    .game-info h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .game-info p {
+      font-size: 13px;
+      color: var(--text-sub);
+      margin-bottom: 8px;
+    }
+
+    .rating {
+      font-size: 13px;
+      color: #facc15;
+    }
+
+    .section {
+      margin-bottom: 60px;
+    }
+
+    .section-title {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    /* STORE GRID */
+    .store-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .store-card {
+      background: var(--bg-card);
+      padding: 18px;
+      border-radius: 16px;
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .store-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+    }
+
+    .store-card img {
+      width: 100%;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+    }
+
+    .store-card h3 {
+      font-size: 16px;
+      margin-bottom: 6px;
+    }
+
+    .store-card p {
+      font-size: 13px;
+      color: var(--text-sub);
+    }
+
+    /* MOBILE */
+    @media(max-width:768px) {
+      .nav-menu {
+        display: none;
+      }
+
+      .search {
+        width: 140px;
+      }
+
+      .main {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
+
 <body>
 
-<aside class="sidebar">
-  <div class="logo">🎮 FallingCat</div>
-  <nav class="menu">
-    <a href="#">🏠 Trang chủ</a>
-    <a href="#">🔥 Phổ biến</a>
-    <a href="#">🆕 Game mới</a>
-    <a href="#">🎯 Hành động</a>
-    <a href="#">🧩 Puzzle</a>
-  </nav>
-</aside>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="logo">ITC Games</div>
 
-<main class="main">
-  <div class="topbar">
-    <h1>Game nổi bật</h1>
-    <input class="search" placeholder="Tìm game..." oninput="filterGames(this.value)">
-  </div>
+    <nav class="nav-menu">
+      <a href="#" class="active">Trang chủ</a>
+      <a href="#">Phổ biến</a>
+      <a href="#">Game mới</a>
+      <a href="#">Hành động</a>
+      <a href="#">Puzzle</a>
+    </nav>
 
-  <div class="game-grid" id="gameGrid"></div>
-</main>
+    <div class="nav-actions">
+      <!-- <input class="search" placeholder="Tìm game..." oninput="filterGames(this.value)"> -->
+      <!-- <div class="avatar">FC</div> -->
+    </div>
+  </header>
 
-<script>
-let games = [];
+  <main class="main">
 
-async function loadGames(){
-  const res = await fetch('games.json');
-  games = await res.json();
-  displayGames(games);
-}
+    <!-- ========== SECTION 1: ARCANE HUNTER HERO ========== -->
+    <section class="section">
+      <div class="hero">
+        <div class="hero-content">
+          <h2>Arcane Hunter</h2>
+          <p>Game Action RPG chính thức từ ITC Game Studio</p>
+          <div style="display:flex; gap:12px;">
+            <!-- <button onclick="window.location='play.html?id=1'">Chơi Demo</button> -->
+            <button style="background:white;color:black;"
+              onclick="window.open('https://play.google.com/store/apps/details?id=com.itcgamestudio.arcane.hunter.soul.survivor.monster.action.shooter.rpg','_blank')">
+              Google Play
+            </button>
+            <button style="background:black;color:white;"
+              onclick="window.open('https://apps.apple.com/vn/app/arcane-hunter-soul-survivor/id6740374474','_blank')">
+              Apple Store
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
 
-function displayGames(list){
-  const container = document.getElementById('gameGrid');
-  container.innerHTML = '';
-  list.forEach(g=>{
-    const card = document.createElement('div');
-    card.className = 'game-card';
-    card.onclick = ()=>{window.location.href='play.html?id='+g.id;}
-    card.innerHTML = `<img src="${g.thumbnail}" alt="${g.name}">
-      <div class="game-info"><h3>${g.name}</h3><p>${g.category}</p></div>`;
-    container.appendChild(card);
-  });
-}
+    <!-- ========== SECTION 2: STORE LINKS ========== -->
+    <section class="section">
+      <h2 class="section-title">Các sản phẩm đã phát hành trên IOS</h2>
+      <div class="store-grid" id="storegrid_ios">
+      </div>
+    </section>
+    <section class="section">
+      <h2 class="section-title">Các sản phẩm đã phát hành trên Android</h2>
+      <div class="store-grid" id="storegrid_android">
+      </div>
+    </section>
 
-function filterGames(keyword){
-  const filtered = games.filter(g=>g.name.toLowerCase().includes(keyword.toLowerCase()));
-  displayGames(filtered);
-}
+    <!-- ========== SECTION 3: DEMO GAME WEB ========== -->
+    <section class="section">
+      <h2 class="section-title">Demo Game</h2>
+      <div class="game-grid" id="gameGrid"></div>
+    </section>
 
-loadGames();
-</script>
+  </main>
+
+  <script>
+    let games = [];
+
+    async function loadGames() {
+
+
+      const res_android = await fetch('games_store.json');
+      const games_android = await res_android.json();
+      displayGames_Android(games_android);
+
+      const res_ios = await fetch('games_store.json');
+      const games_ios = await res_ios.json();
+      displayGames_iOS(games_ios);
+
+      const res = await fetch('games.json');
+      games = await res.json();
+      displayGames(games);
+
+    }
+
+    function displayGames_iOS(list) {
+      const container = document.getElementById('storegrid_ios');
+      list.forEach(g => {
+        if (g.link_ios == "") return;
+        const card = document.createElement('div');
+        card.className = 'store-card';
+        card.onclick = () => { window.open(g.link_ios, '_blank'); }
+        card.innerHTML = `
+      <img src="${g.thumbnail}" alt="${g.name}">
+        <h3>${g.name}</h3>
+        <p>Action RPG sinh tồn</p>
+    `;
+        container.appendChild(card);
+      });
+    }
+
+    function displayGames_Android(list) {
+      const container = document.getElementById('storegrid_android');
+      list.forEach(g => {
+        if (g.link_android == "") return;
+        const card = document.createElement('div');
+        card.className = 'store-card';
+        card.onclick = () => { window.open(g.link_android, '_blank'); }
+        card.innerHTML = `
+      <img src="${g.thumbnail}" alt="${g.name}">
+        <h3>${g.name}</h3>
+        <p>Action RPG sinh tồn</p>
+    `;
+        container.appendChild(card);
+      });
+    }
+
+    function displayGames(list) {
+      const container = document.getElementById('gameGrid');
+      container.innerHTML = '';
+      list.forEach(g => {
+        const card = document.createElement('div');
+        card.className = 'game-card';
+        card.onclick = () => { window.location.href = 'play.html?id=' + g.id; }
+        card.innerHTML = `
+      <img src="${g.thumbnail}" alt="${g.name}">
+      <div class="badge">${g.category}</div>
+      <div class="game-info">
+        <h3>${g.name}</h3>
+        <p>${g.description || ''}</p>
+        <div class="rating">⭐ ${g.rating || 4.5}</div>
+      </div>
+    `;
+        container.appendChild(card);
+      });
+    }
+
+    function filterGames(keyword) {
+      const filtered = games.filter(g =>
+        g.name.toLowerCase().includes(keyword.toLowerCase())
+      );
+      displayGames(filtered);
+    }
+
+    loadGames();
+  </script>
+
 </body>
+
 </html>
