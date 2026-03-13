@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Unity HTML Converter</title>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #080b10;
+      --panel: #0d1117;
+      --border: #1e2530;
+      --accent: #f5a623;
+      --accent2: #e8432d;
+      --green: #3dd68c;
+      --text: #e2e8f0;
+      --muted: #4a5568;
+      --muted2: #2d3748;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Syne', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background-image:
+        linear-gradient(rgba(245,166,35,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,166,35,0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none; z-index: 0;
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 48px 24px;
+      position: relative; z-index: 1;
+    }
+
+    header { margin-bottom: 48px; }
+
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: var(--accent); border: 1px solid rgba(245,166,35,0.3);
+      padding: 4px 10px; border-radius: 4px;
+      margin-bottom: 16px; letter-spacing: 1px;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px; background: var(--accent);
+      border-radius: 50%; animation: pulse-dot 2s ease infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    h1 {
+      font-size: clamp(32px, 5vw, 52px);
+      font-weight: 800; line-height: 1.05; letter-spacing: -1px;
+    }
+
+    h1 span {
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+
+    .subtitle {
+      margin-top: 12px; color: var(--muted); font-size: 15px;
+      font-weight: 400; max-width: 500px; line-height: 1.6;
+    }
+
+    .steps-bar {
+      display: flex; align-items: center; gap: 0; margin-bottom: 32px;
+    }
+
+    .step-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 12px; color: var(--muted);
+      font-family: 'JetBrains Mono', monospace; transition: color 0.3s;
+    }
+
+    .step-item.active { color: var(--accent); }
+    .step-item.done { color: var(--green); }
+
+    .step-num {
+      width: 24px; height: 24px; border-radius: 50%;
+      border: 1px solid currentColor;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; flex-shrink: 0; transition: all 0.3s;
+    }
+
+    .step-item.done .step-num { background: var(--green); border-color: var(--green); color: #000; }
+    .step-item.active .step-num { background: rgba(245,166,35,0.15); border-color: var(--accent); }
+
+    .step-connector {
+      flex: 1; height: 1px; background: var(--border); margin: 0 12px; max-width: 60px;
+    }
+
+    .panel {
+      background: var(--panel); border: 1px solid var(--border);
+      border-radius: 12px; margin-bottom: 16px; overflow: hidden;
+      transition: border-color 0.3s;
+    }
+
+    .panel:hover { border-color: #2a3445; }
+
+    .panel-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; border-bottom: 1px solid var(--border);
+    }
+
+    .panel-label {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 13px; font-weight: 600; letter-spacing: 0.5px;
+    }
+
+    .panel-icon {
+      width: 32px; height: 32px; border-radius: 8px;
+      display: flex; align-items: center; justify-content: center; font-size: 14px;
+    }
+
+    .icon-orange { background: rgba(245,166,35,0.12); }
+    .icon-blue { background: rgba(59,130,246,0.12); }
+    .icon-green { background: rgba(61,214,140,0.12); }
+    .icon-red { background: rgba(232,67,45,0.12); }
+
+    .panel-body { padding: 20px; }
+
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: 10px;
+      padding: 40px 20px; text-align: center; cursor: pointer;
+      transition: all 0.25s; position: relative;
+    }
+
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--accent); background: rgba(245,166,35,0.04);
+    }
+
+    .upload-zone input {
+      position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+    }
+
+    .upload-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+    .upload-main { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+    .upload-sub { font-size: 12px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .upload-zone.loaded { border-style: solid; border-color: var(--green); background: rgba(61,214,140,0.04); }
+
+    .file-loaded { display: flex; align-items: center; gap: 10px; font-size: 13px; justify-content: center; }
+    .file-loaded .check { color: var(--green); font-size: 18px; }
+    .file-loaded .fname { font-family: 'JetBrains Mono', monospace; color: var(--green); font-weight: 600; }
+    .file-loaded .fsize { color: var(--muted); font-size: 11px; }
+
+    .game-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px;
+    }
+
+    .game-card {
+      border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+      cursor: pointer; transition: all 0.2s; position: relative;
+    }
+
+    .game-card:hover { border-color: var(--accent); background: rgba(245,166,35,0.04); }
+    .game-card.selected { border-color: var(--accent); background: rgba(245,166,35,0.08); }
+
+    .game-card.selected::after {
+      content: '✓'; position: absolute; top: 8px; right: 8px;
+      width: 18px; height: 18px; background: var(--accent); color: #000;
+      border-radius: 50%; font-size: 10px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .game-card-name { font-size: 13px; font-weight: 600; margin-bottom: 4px; }
+    .game-card-cat { font-size: 11px; color: var(--muted); font-family: 'JetBrains Mono', monospace; }
+
+    .no-games { text-align: center; padding: 32px; color: var(--muted); font-size: 13px; }
+
+    .field-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;
+    }
+
+    .field-group label {
+      display: block; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+      color: var(--muted); margin-bottom: 6px; letter-spacing: 0.5px;
+    }
+
+    .field-group input {
+      width: 100%; background: var(--bg); border: 1px solid var(--border);
+      color: var(--text); padding: 10px 12px; border-radius: 6px;
+      font-family: 'JetBrains Mono', monospace; font-size: 12px;
+      outline: none; transition: border-color 0.2s;
+    }
+
+    .field-group input:focus { border-color: var(--accent); }
+
+    .convert-btn {
+      width: 100%; padding: 16px;
+      background: linear-gradient(135deg, var(--accent), var(--accent2));
+      border: none; border-radius: 10px; color: #fff;
+      font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700;
+      letter-spacing: 1px; cursor: pointer; transition: all 0.2s;
+      position: relative; overflow: hidden;
+    }
+
+    .convert-btn:hover { transform: translateY(-1px); box-shadow: 0 8px 24px rgba(232,67,45,0.3); }
+    .convert-btn:active { transform: translateY(0); }
+
+    .convert-btn::before {
+      content: ''; position: absolute; top: 0; left: -100%; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent);
+      animation: btn-shimmer 2.5s ease infinite;
+    }
+
+    @keyframes btn-shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+
+    .output-area {
+      background: var(--bg); border: 1px solid var(--border); border-radius: 8px;
+      padding: 16px; font-family: 'JetBrains Mono', monospace; font-size: 11px;
+      color: var(--muted); line-height: 1.6; max-height: 200px; overflow-y: auto;
+      margin-bottom: 16px; min-height: 80px;
+    }
+
+    .log-line { margin-bottom: 4px; display: flex; gap: 8px; }
+    .log-line .ts { color: #2d3748; flex-shrink: 0; }
+    .log-line.ok .msg { color: var(--green); }
+    .log-line.info .msg { color: #60a5fa; }
+    .log-line.warn .msg { color: var(--accent); }
+    .log-line.err .msg { color: var(--accent2); }
+
+    .download-btn {
+      width: 100%; padding: 14px;
+      background: rgba(61,214,140,0.1); border: 1px solid var(--green);
+      border-radius: 10px; color: var(--green);
+      font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+      cursor: pointer; transition: all 0.2s; display: none;
+    }
+
+    .download-btn:hover { background: rgba(61,214,140,0.18); }
+    .download-btn.visible { display: block; }
+
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 2px; }
+
+    @keyframes fade-up {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .container > * { animation: fade-up 0.4s ease both; }
+    .container > *:nth-child(1) { animation-delay: 0.05s; }
+    .container > *:nth-child(2) { animation-delay: 0.1s; }
+    .container > *:nth-child(3) { animation-delay: 0.15s; }
+    .container > *:nth-child(4) { animation-delay: 0.2s; }
+    .container > *:nth-child(5) { animation-delay: 0.25s; }
+    .container > *:nth-child(6) { animation-delay: 0.3s; }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge"><div class="badge-dot"></div> UNITY WEBGL TOOL</div>
+    <h1>HTML<br><span>Converter</span></h1>
+    <p class="subtitle">Chuyển đổi file index.html Unity thành phiên bản có loading screen tùy chỉnh và lấy game name từ games.json.</p>
+  </header>
+
+  <div class="steps-bar">
+    <div class="step-item active" id="s1"><div class="step-num">1</div> Upload files</div>
+    <div class="step-connector"></div>
+    <div class="step-item" id="s2"><div class="step-num">2</div> Chọn game</div>
+    <div class="step-connector"></div>
+    <div class="step-item" id="s3"><div class="step-num">3</div> Cấu hình</div>
+    <div class="step-connector"></div>
+    <div class="step-item" id="s4"><div class="step-num">4</div> Download</div>
+  </div>
+
+  <!-- Step 1 -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-label">
+        <div class="panel-icon icon-orange">📄</div>
+        Bước 1 — Upload files
+      </div>
+    </div>
+    <div class="panel-body">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">index.html gốc</div>
+          <div class="upload-zone" id="zone-html">
+            <input type="file" accept=".html" id="input-html">
+            <span class="upload-icon">📃</span>
+            <div class="upload-main">Kéo thả hoặc click</div>
+            <div class="upload-sub">index.html của Unity</div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:8px;font-family:'JetBrains Mono',monospace;">games.json</div>
+          <div class="upload-zone" id="zone-json">
+            <input type="file" accept=".json" id="input-json">
+            <span class="upload-icon">⚙️</span>
+            <div class="upload-main">Kéo thả hoặc click</div>
+            <div class="upload-sub">Config file chứa game list</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2 -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-label">
+        <div class="panel-icon icon-blue">🎮</div>
+        Bước 2 — Chọn game
+      </div>
+      <span style="font-size:11px;color:var(--muted);font-family:'JetBrains Mono',monospace;" id="game-count"></span>
+    </div>
+    <div class="panel-body">
+      <div class="game-grid" id="game-grid">
+        <div class="no-games">Upload games.json để xem danh sách game</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-label">
+        <div class="panel-icon icon-red">⚙️</div>
+        Bước 3 — Cấu hình build
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="field-row">
+        <div class="field-group">
+          <label>DATA URL</label>
+          <input type="text" id="cfg-dataurl" placeholder="https://...PetVsMonster.data.unityweb">
+        </div>
+        <div class="field-group">
+          <label>LOADER FILE</label>
+          <input type="text" id="cfg-loader" placeholder="Build/PetVsMonster.loader.js">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>FRAMEWORK FILE</label>
+          <input type="text" id="cfg-framework" placeholder="Build/PetVsMonster.framework.js.unityweb">
+        </div>
+        <div class="field-group">
+          <label>WASM FILE</label>
+          <input type="text" id="cfg-wasm" placeholder="Build/PetVsMonster.wasm.unityweb">
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field-group">
+          <label>PRODUCT VERSION</label>
+          <input type="text" id="cfg-version" placeholder="0.0.1">
+        </div>
+        <div class="field-group">
+          <label>COMPANY NAME</label>
+          <input type="text" id="cfg-company" placeholder="DefaultCompany">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 4 -->
+  <div class="panel">
+    <div class="panel-header">
+      <div class="panel-label">
+        <div class="panel-icon icon-green">✨</div>
+        Bước 4 — Convert & Download
+      </div>
+    </div>
+    <div class="panel-body">
+      <button class="convert-btn" onclick="doConvert()">⚡ CONVERT & GENERATE</button>
+      <div style="margin-top:16px;">
+        <div class="output-area" id="log-area"></div>
+        <button class="download-btn" id="btn-download" onclick="doDownload()">⬇ Download index.html</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  let htmlContent = null;
+  let jsonGames = null;
+  let selectedGameId = null;
+  let outputHTML = null;
+
+  function setupZone(zoneId, inputId, type) {
+    const zone = document.getElementById(zoneId);
+    const input = document.getElementById(inputId);
+    input.addEventListener('change', (e) => handleFile(e.target.files[0], type, zone));
+    zone.addEventListener('dragover', (e) => { e.preventDefault(); zone.classList.add('dragover'); });
+    zone.addEventListener('dragleave', () => zone.classList.remove('dragover'));
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault(); zone.classList.remove('dragover');
+      handleFile(e.dataTransfer.files[0], type, zone);
+    });
+  }
+
+  function handleFile(file, type, zone) {
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const content = e.target.result;
+      if (type === 'html') {
+        htmlContent = content;
+        autoExtractConfig(content);
+        log('ok', 'Đã load: ' + file.name + ' (' + fmtSize(file.size) + ')');
+      } else {
+        try {
+          jsonGames = JSON.parse(content);
+          renderGameGrid(jsonGames);
+          log('ok', 'Đã load: ' + file.name + ' — ' + jsonGames.length + ' games');
+        } catch {
+          log('err', 'games.json không hợp lệ!'); return;
+        }
+      }
+      zone.classList.add('loaded');
+      zone.innerHTML = '<div class="file-loaded"><span class="check">✓</span><div><div class="fname">' + file.name + '</div><div class="fsize">' + fmtSize(file.size) + '</div></div></div>';
+      updateSteps();
+    };
+    reader.readAsText(file);
+  }
+
+  function fmtSize(b) {
+    if (b < 1024) return b + ' B';
+    if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+    return (b/1048576).toFixed(1) + ' MB';
+  }
+
+  function autoExtractConfig(html) {
+    const extract = (key) => {
+      const re = new RegExp(key + ':\\s*["\']([^"\']+)["\']');
+      const m = html.match(re); return m ? m[1] : '';
+    };
+    const dataUrl = extract('dataUrl');
+    const framework = extract('frameworkUrl');
+    const wasm = extract('codeUrl');
+    const version = extract('productVersion');
+    const company = extract('companyName');
+    const loaderM = html.match(/src=["\']([^"\']*loader[^"\']*)["\']|\.src\s*=\s*["\']([^"\']*loader[^"\']*)["\']"/i);
+    const loader = loaderM ? (loaderM[1] || loaderM[2] || '') : '';
+
+    if (dataUrl) document.getElementById('cfg-dataurl').value = dataUrl;
+    if (loader) document.getElementById('cfg-loader').value = loader;
+    if (framework) document.getElementById('cfg-framework').value = framework;
+    if (wasm) document.getElementById('cfg-wasm').value = wasm;
+    if (version) document.getElementById('cfg-version').value = version;
+    if (company) document.getElementById('cfg-company').value = company;
+    log('info', 'Tự động trích xuất config từ HTML');
+  }
+
+  function renderGameGrid(games) {
+    const grid = document.getElementById('game-grid');
+    document.getElementById('game-count').textContent = games.length + ' games';
+    grid.innerHTML = games.map(g =>
+      '<div class="game-card" id="gc-' + g.id + '" onclick="selectGame(\'' + g.id + '\')">' +
+      '<div class="game-card-name">' + g.name + '</div>' +
+      '<div class="game-card-cat">' + (g.category || '') + '</div></div>'
+    ).join('');
+  }
+
+  function selectGame(id) {
+    selectedGameId = id;
+    document.querySelectorAll('.game-card').forEach(c => c.classList.remove('selected'));
+    document.getElementById('gc-' + id).classList.add('selected');
+    const game = jsonGames.find(g => g.id === id);
+    if (game) log('info', 'Đã chọn game: ' + game.name);
+    updateSteps();
+  }
+
+  function updateSteps() {
+    const s1 = document.getElementById('s1');
+    const s2 = document.getElementById('s2');
+    const s3 = document.getElementById('s3');
+    const hasHtml = !!htmlContent, hasJson = !!jsonGames, hasGame = !!selectedGameId;
+    setStepState(s1, hasHtml && hasJson ? 'done' : 'active');
+    setStepState(s2, hasGame ? 'done' : (hasJson ? 'active' : ''));
+    setStepState(s3, hasGame ? 'active' : '');
+  }
+
+  function setStepState(el, state) {
+    el.classList.remove('active','done');
+    if (state) el.classList.add(state);
+  }
+
+  function log(type, msg) {
+    const area = document.getElementById('log-area');
+    const ts = new Date().toLocaleTimeString('vi-VN', { hour12: false });
+    const line = document.createElement('div');
+    line.className = 'log-line ' + type;
+    line.innerHTML = '<span class="ts">[' + ts + ']</span><span class="msg">' + msg + '</span>';
+    area.appendChild(line);
+    area.scrollTop = area.scrollHeight;
+  }
+
+  function doConvert() {
+    if (!htmlContent) { log('err', 'Chưa upload index.html!'); return; }
+    if (!jsonGames) { log('err', 'Chưa upload games.json!'); return; }
+    if (!selectedGameId) { log('err', 'Chưa chọn game!'); return; }
+
+    const cfg = {
+      gameId: selectedGameId,
+      dataUrl: document.getElementById('cfg-dataurl').value,
+      loader: document.getElementById('cfg-loader').value,
+      framework: document.getElementById('cfg-framework').value,
+      wasm: document.getElementById('cfg-wasm').value,
+      version: document.getElementById('cfg-version').value || '0.0.1',
+      company: document.getElementById('cfg-company').value || 'DefaultCompany',
+    };
+
+    if (!cfg.dataUrl) { log('err', 'Thiếu Data URL!'); return; }
+    if (!cfg.loader) { log('err', 'Thiếu Loader File!'); return; }
+
+    log('info', 'Bắt đầu convert...');
+    outputHTML = generateHTML(cfg);
+    const game = jsonGames.find(g => g.id === selectedGameId);
+    log('ok', 'Generate thành công!');
+    log('ok', 'Game: ' + (game ? game.name : selectedGameId));
+    log('ok', 'File size: ' + fmtSize(new Blob([outputHTML]).size));
+
+    document.getElementById('btn-download').classList.add('visible');
+    setStepState(document.getElementById('s4'), 'active');
+  }
+
+  function doDownload() {
+    if (!outputHTML) return;
+    const blob = new Blob([outputHTML], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'index.html';
+    a.click();
+    URL.revokeObjectURL(a.href);
+    log('ok', 'Đã download index.html!');
+    setStepState(document.getElementById('s4'), 'done');
+  }
+
+  function generateHTML(cfg) {
+    const gamesJson = JSON.stringify(jsonGames, null, 2);
+    const gameIdJson = JSON.stringify(cfg.gameId);
+    const dataUrlJson = JSON.stringify(cfg.dataUrl);
+    const loaderJson = JSON.stringify(cfg.loader);
+    const frameworkJson = JSON.stringify(cfg.framework);
+    const wasmJson = JSON.stringify(cfg.wasm);
+    const versionJson = JSON.stringify(cfg.version);
+    const companyJson = JSON.stringify(cfg.company);
+
+    return `<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    #custom-loading-screen {
+      position: fixed; inset: 0; background: #0a0a0f;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999; font-family: 'Segoe UI', sans-serif; color: #fff;
+      transition: opacity 0.6s ease;
+    }
+    #custom-loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    .loading-title {
+      font-size: 28px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px;
+      background: linear-gradient(135deg, #f5a623, #e8432d);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .progress-container { width: 320px; }
+    .progress-labels { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .progress-stage { font-size: 11px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+    .progress-percent { font-size: 22px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; min-width: 52px; text-align: right; }
+    .progress-track { width: 100%; height: 4px; background: #1e1e2e; border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #e8432d, #f5a623); border-radius: 2px; transition: width 0.25s ease; position: relative; }
+    .progress-fill::after { content: ''; position: absolute; top: 0; left: -100%; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 1.5s ease infinite; }
+    @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+    .steps { display: flex; gap: 8px; margin-top: 20px; align-items: center; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #444; transition: color 0.4s; }
+    .step.done { color: #4caf50; } .step.active { color: #f5a623; }
+    .step-dot { width: 6px; height: 6px; border-radius: 50%; background: #333; transition: background 0.4s; flex-shrink: 0; }
+    .step.done .step-dot { background: #4caf50; }
+    .step.active .step-dot { background: #f5a623; animation: blink 0.8s ease infinite alternate; }
+    @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
+    .step-sep { width: 16px; height: 1px; background: #333; }
+    .size-info { margin-top: 14px; font-size: 11px; color: #555; font-variant-numeric: tabular-nums; min-height: 16px; }
+  </style>
+</head>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <div id="custom-loading-screen">
+    <img src="TemplateData/Logo.png" alt="Logo" width="400" style="margin-top: -80px; margin-bottom: 100px;">
+    <div class="loading-title" id="game-title">Loading...</div>
+    <div class="progress-container">
+      <div class="progress-labels">
+        <span class="progress-stage" id="stage-label">Đang khởi động...</span>
+        <span class="progress-percent" id="pct-label">0%</span>
+      </div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="steps">
+        <div class="step active" id="step-download"><div class="step-dot"></div>Download</div>
+        <div class="step-sep"></div>
+        <div class="step" id="step-compile"><div class="step-dot"></div>Compile</div>
+        <div class="step-sep"></div>
+        <div class="step" id="step-init"><div class="step-dot"></div>Init</div>
+      </div>
+      <div class="size-info" id="size-info"></div>
+    </div>
+  </div>
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" width=600 height=960 tabindex="-1" style="background: #231F20"></canvas>
+    <div id="unity-warning"></div>
+    <div id="unity-footer">
+      <div id="unity-webgl-logo"></div>
+      <div id="unity-fullscreen-button"></div>
+      <div id="unity-build-title">Unity WebGL</div>
+    </div>
+  </div>
+  <script>
+    const GAME_ID = ${gameIdJson};
+    const GAMES_CONFIG = ${gamesJson};
+    (function() {
+      const game = GAMES_CONFIG.find(g => g.id === GAME_ID);
+      if (game) { document.getElementById('game-title').textContent = game.name; document.title = game.name; }
+    })();
+    const fillEl=document.getElementById('progress-fill'), pctEl=document.getElementById('pct-label'),
+          stageEl=document.getElementById('stage-label'), sizeEl=document.getElementById('size-info'),
+          stepDl=document.getElementById('step-download'), stepCo=document.getElementById('step-compile'),
+          stepIn=document.getElementById('step-init');
+    let _pct=0;
+    function setProgress(pct,label,sizeText){_pct=Math.max(_pct,Math.min(100,pct));fillEl.style.width=_pct+'%';pctEl.textContent=Math.round(_pct)+'%';if(label!==undefined)stageEl.textContent=label;if(sizeText!==undefined)sizeEl.textContent=sizeText;}
+    function setStep(which){[stepDl,stepCo,stepIn].forEach((s,i,arr)=>{s.classList.remove('done','active');if(i<arr.indexOf(which))s.classList.add('done');if(s===which)s.classList.add('active');});}
+    function fmtMB(b){return(b/1048576).toFixed(1)+' MB';}
+    const DATA_URL=${dataUrlJson};
+    async function downloadWithProgress(url){
+      setStep(stepDl);setProgress(0,'Loading...','Connecting...');
+      let total=0;
+      try{const head=await fetch(url,{method:'HEAD'});const cl=head.headers.get('Content-Length');if(cl)total=parseInt(cl,10);}catch(_){}
+      if(total)sizeEl.textContent='0 MB / '+fmtMB(total);
+      const response=await fetch(url);if(!response.ok)throw new Error('HTTP '+response.status);
+      if(!total){const cl=response.headers.get('Content-Length');if(cl)total=parseInt(cl,10);}
+      const reader=response.body.getReader();const chunks=[];let received=0;
+      while(true){const{done,value}=await reader.read();if(done)break;chunks.push(value);received+=value.length;
+        const sizeText=total?fmtMB(received)+' / '+fmtMB(total):fmtMB(received)+' downloaded';
+        setProgress(total?(received/total)*70:Math.min(65,_pct+0.15),'Loading...',sizeText);}
+      const merged=new Uint8Array(received);let offset=0;for(const c of chunks){merged.set(c,offset);offset+=c.length;}
+      setProgress(70,'Loading Done!',fmtMB(received)+' / '+fmtMB(received));setStep(stepCo);
+      return URL.createObjectURL(new Blob([merged]));
+    }
+    var canvas=document.querySelector("#unity-canvas"),fullscreenButton=document.querySelector("#unity-fullscreen-button"),warningBanner=document.querySelector("#unity-warning");
+    function unityShowBanner(msg,type){function upd(){warningBanner.style.display=warningBanner.children.length?'block':'none';}var div=document.createElement('div');div.innerHTML=msg;warningBanner.appendChild(div);if(type==='error')div.style='background:red;padding:10px';else{if(type==='warning')div.style='background:yellow;padding:10px';setTimeout(()=>{warningBanner.removeChild(div);upd();},5000);}upd();}
+    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var meta=document.createElement('meta');meta.name='viewport';meta.content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';document.getElementsByTagName('head')[0].appendChild(meta);document.querySelector("#unity-container").className="unity-mobile";canvas.className="unity-mobile";canvas.style.width="100%";canvas.style.height="100%";canvas.style.position="fixed";}else{canvas.style.width="600px";canvas.style.height="960px";}
+    (async()=>{
+      try{
+        const blobUrl=await downloadWithProgress(DATA_URL);
+        await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=${loaderJson};s.onload=resolve;s.onerror=reject;document.body.appendChild(s);});
+        setStep(stepIn);
+        const config={dataUrl:blobUrl,frameworkUrl:${frameworkJson},codeUrl:${wasmJson},streamingAssetsUrl:"StreamingAssets",companyName:${companyJson},productName:"Unity WebGL",productVersion:${versionJson},showBanner:unityShowBanner};
+        const unityInstance=await createUnityInstance(canvas,config,(p)=>{setProgress(70+p*30,'Init...','');});
+        setProgress(100,'Ready!','');[stepDl,stepCo,stepIn].forEach(s=>{s.classList.add('done');s.classList.remove('active');});
+        URL.revokeObjectURL(blobUrl);
+        setTimeout(()=>{const screen=document.getElementById('custom-loading-screen');screen.classList.add('fade-out');setTimeout(()=>screen.remove(),700);},300);
+        fullscreenButton.onclick=()=>unityInstance.SetFullscreen(1);
+      }catch(err){stageEl.textContent='⚠ Error loading game';stageEl.style.color='#e8432d';sizeEl.textContent=err.message||'Please reload the page.';console.error(err);}
+    })();
+  <\/script>
+</body>
+</html>`;
+  }
+
+  setupZone('zone-html', 'input-html', 'html');
+  setupZone('zone-json', 'input-json', 'json');
+  log('info', 'Sẵn sàng. Upload index.html và games.json để bắt đầu.');
+</script>
+</body>
+</html>
