@@ -1,131 +1,139 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Tower_Defense</title>
-    <link rel="shortcut icon" href="TemplateData/favicon.ico">
-    <link rel="stylesheet" href="TemplateData/style.css">
-  </head>
-  <body>
-    <div id="unity-container" class="unity-desktop">
-      <canvas id="unity-canvas" width=600 height=960 tabindex="-1"></canvas>
-      <div id="unity-loading-bar">
-        <div id="unity-logo"></div>
-        <div id="unity-progress-bar-empty">
-          <div id="unity-progress-bar-full"></div>
-        </div>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>Unity WebGL Player</title>
+  <link rel="shortcut icon" href="TemplateData/favicon.ico">
+  <link rel="stylesheet" href="TemplateData/style.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    #custom-loading-screen {
+      position: fixed; inset: 0; background: #0a0a0f;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 9999; font-family: 'Segoe UI', sans-serif; color: #fff;
+      transition: opacity 0.6s ease;
+    }
+    #custom-loading-screen.fade-out { opacity: 0; pointer-events: none; }
+    .loading-title {
+      font-size: 28px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px;
+      background: linear-gradient(135deg, #f5a623, #e8432d);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .progress-container { width: 320px; }
+    .progress-labels { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .progress-stage { font-size: 11px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
+    .progress-percent { font-size: 22px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; min-width: 52px; text-align: right; }
+    .progress-track { width: 100%; height: 4px; background: #1e1e2e; border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #e8432d, #f5a623); border-radius: 2px; transition: width 0.25s ease; position: relative; }
+    .progress-fill::after { content: ''; position: absolute; top: 0; left: -100%; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 1.5s ease infinite; }
+    @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
+    .steps { display: flex; gap: 8px; margin-top: 20px; align-items: center; }
+    .step { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #444; transition: color 0.4s; }
+    .step.done { color: #4caf50; } .step.active { color: #f5a623; }
+    .step-dot { width: 6px; height: 6px; border-radius: 50%; background: #333; transition: background 0.4s; flex-shrink: 0; }
+    .step.done .step-dot { background: #4caf50; }
+    .step.active .step-dot { background: #f5a623; animation: blink 0.8s ease infinite alternate; }
+    @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
+    .step-sep { width: 16px; height: 1px; background: #333; }
+    .size-info { margin-top: 14px; font-size: 11px; color: #555; font-variant-numeric: tabular-nums; min-height: 16px; }
+  </style>
+</head>
+<body style="text-align: center; padding: 0; border: 0; margin: 0;">
+  <div id="custom-loading-screen">
+    <img src="TemplateData/Logo.png" alt="Logo" width="400" style="margin-top: -80px; margin-bottom: 100px;">
+    <div class="loading-title" id="game-title">Loading...</div>
+    <div class="progress-container">
+      <div class="progress-labels">
+        <span class="progress-stage" id="stage-label">Đang khởi động...</span>
+        <span class="progress-percent" id="pct-label">0%</span>
       </div>
-      <div id="unity-warning"> </div>
-      <div id="unity-footer">
-        <div id="unity-webgl-logo"></div>
-        <div id="unity-fullscreen-button"></div>
-        <div id="unity-build-title">Tower_Defense</div>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="steps">
+        <div class="step active" id="step-download"><div class="step-dot"></div>Download</div>
+        <div class="step-sep"></div>
+        <div class="step" id="step-compile"><div class="step-dot"></div>Compile</div>
+        <div class="step-sep"></div>
+        <div class="step" id="step-init"><div class="step-dot"></div>Init</div>
       </div>
+      <div class="size-info" id="size-info"></div>
     </div>
-    <script>
-
-      var container = document.querySelector("#unity-container");
-      var canvas = document.querySelector("#unity-canvas");
-      var loadingBar = document.querySelector("#unity-loading-bar");
-      var progressBarFull = document.querySelector("#unity-progress-bar-full");
-      var fullscreenButton = document.querySelector("#unity-fullscreen-button");
-      var warningBanner = document.querySelector("#unity-warning");
-
-      // Shows a temporary message banner/ribbon for a few seconds, or
-      // a permanent error message on top of the canvas if type=='error'.
-      // If type=='warning', a yellow highlight color is used.
-      // Modify or remove this function to customize the visually presented
-      // way that non-critical warnings and error messages are presented to the
-      // user.
-      function unityShowBanner(msg, type) {
-        function updateBannerVisibility() {
-          warningBanner.style.display = warningBanner.children.length ? 'block' : 'none';
-        }
-        var div = document.createElement('div');
-        div.innerHTML = msg;
-        warningBanner.appendChild(div);
-        if (type == 'error') div.style = 'background: red; padding: 10px;';
-        else {
-          if (type == 'warning') div.style = 'background: yellow; padding: 10px;';
-          setTimeout(function() {
-            warningBanner.removeChild(div);
-            updateBannerVisibility();
-          }, 5000);
-        }
-        updateBannerVisibility();
-      }
-
-      var buildUrl = "Build";
-      var loaderUrl = buildUrl + "/PetVsMonster.loader.js";
-      var config = {
-        dataUrl: "https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.data.unityweb",
-        frameworkUrl: buildUrl + "/PetVsMonster.framework.js.unityweb",
-        codeUrl: buildUrl + "/PetVsMonster.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "DefaultCompany",
-        productName: "Tower_Defense",
-        productVersion: "0.0.15",
-        showBanner: unityShowBanner,
-      };
-
-      // By default, Unity keeps WebGL canvas render target size matched with
-      // the DOM size of the canvas element (scaled by window.devicePixelRatio)
-      // Set this to false if you want to decouple this synchronization from
-      // happening inside the engine, and you would instead like to size up
-      // the canvas DOM size and WebGL render target sizes yourself.
-      // config.matchWebGLToCanvasSize = false;
-
-      // If you would like all file writes inside Unity Application.persistentDataPath
-      // directory to automatically persist so that the contents are remembered when
-      // the user revisits the site the next time, uncomment the following line:
-      // config.autoSyncPersistentDataPath = true;
-      // This autosyncing is currently not the default behavior to avoid regressing
-      // existing user projects that might rely on the earlier manual
-      // JS_FileSystem_Sync() behavior, but in future Unity version, this will be
-      // expected to change.
-
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
-        container.className = "unity-mobile";
-        canvas.className = "unity-mobile";
-
-        // To lower canvas resolution on mobile devices to gain some
-        // performance, uncomment the following line:
-        // config.devicePixelRatio = 1;
-
-
-      } else {
-        // Desktop style: Render the game canvas in a window that can be maximized to fullscreen:
-
-        canvas.style.width = "600px";
-        canvas.style.height = "960px";
-      }
-
-      loadingBar.style.display = "block";
-
-      var script = document.createElement("script");
-      script.src = loaderUrl;
-      script.onload = () => {
-        createUnityInstance(canvas, config, (progress) => {
-          progressBarFull.style.width = 100 * progress + "%";
-              }).then((unityInstance) => {
-                loadingBar.style.display = "none";
-                fullscreenButton.onclick = () => {
-                  unityInstance.SetFullscreen(1);
-                };
-              }).catch((message) => {
-                alert(message);
-              });
-            };
-
-      document.body.appendChild(script);
-
-    </script>
-  </body>
+  </div>
+  <div id="unity-container" class="unity-desktop">
+    <canvas id="unity-canvas" width=600 height=960 tabindex="-1" style="background: #231F20"></canvas>
+    <div id="unity-warning"></div>
+    <div id="unity-footer">
+      <div id="unity-webgl-logo"></div>
+      <div id="unity-fullscreen-button"></div>
+      <div id="unity-build-title">Unity WebGL</div>
+    </div>
+  </div>
+  <script>
+    const GAME_ID = "petvsmonster";
+    const GAMES_CONFIG = [
+  {
+    "id": "wizarddungeon",
+    "name": "Wizard Dungeon",
+    "category": "Hành động",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "petvsmonster",
+    "name": "Pet Vs Monster",
+    "category": "Phiêu lưu",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "puzzlemaster",
+    "name": "Puzzle Master",
+    "category": "Puzzle",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  }
+];
+    (function() {
+      const game = GAMES_CONFIG.find(g => g.id === GAME_ID);
+      if (game) { document.getElementById('game-title').textContent = game.name; document.title = game.name; }
+    })();
+    const fillEl=document.getElementById('progress-fill'), pctEl=document.getElementById('pct-label'),
+          stageEl=document.getElementById('stage-label'), sizeEl=document.getElementById('size-info'),
+          stepDl=document.getElementById('step-download'), stepCo=document.getElementById('step-compile'),
+          stepIn=document.getElementById('step-init');
+    let _pct=0;
+    function setProgress(pct,label,sizeText){_pct=Math.max(_pct,Math.min(100,pct));fillEl.style.width=_pct+'%';pctEl.textContent=Math.round(_pct)+'%';if(label!==undefined)stageEl.textContent=label;if(sizeText!==undefined)sizeEl.textContent=sizeText;}
+    function setStep(which){[stepDl,stepCo,stepIn].forEach((s,i,arr)=>{s.classList.remove('done','active');if(i<arr.indexOf(which))s.classList.add('done');if(s===which)s.classList.add('active');});}
+    function fmtMB(b){return(b/1048576).toFixed(1)+' MB';}
+    const DATA_URL="https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.data.unityweb";
+    async function downloadWithProgress(url){
+      setStep(stepDl);setProgress(0,'Loading...','Connecting...');
+      let total=0;
+      try{const head=await fetch(url,{method:'HEAD'});const cl=head.headers.get('Content-Length');if(cl)total=parseInt(cl,10);}catch(_){}
+      if(total)sizeEl.textContent='0 MB / '+fmtMB(total);
+      const response=await fetch(url);if(!response.ok)throw new Error('HTTP '+response.status);
+      if(!total){const cl=response.headers.get('Content-Length');if(cl)total=parseInt(cl,10);}
+      const reader=response.body.getReader();const chunks=[];let received=0;
+      while(true){const{done,value}=await reader.read();if(done)break;chunks.push(value);received+=value.length;
+        const sizeText=total?fmtMB(received)+' / '+fmtMB(total):fmtMB(received)+' downloaded';
+        setProgress(total?(received/total)*70:Math.min(65,_pct+0.15),'Loading...',sizeText);}
+      const merged=new Uint8Array(received);let offset=0;for(const c of chunks){merged.set(c,offset);offset+=c.length;}
+      setProgress(70,'Loading Done!',fmtMB(received)+' / '+fmtMB(received));setStep(stepCo);
+      return URL.createObjectURL(new Blob([merged]));
+    }
+    var canvas=document.querySelector("#unity-canvas"),fullscreenButton=document.querySelector("#unity-fullscreen-button"),warningBanner=document.querySelector("#unity-warning");
+    function unityShowBanner(msg,type){function upd(){warningBanner.style.display=warningBanner.children.length?'block':'none';}var div=document.createElement('div');div.innerHTML=msg;warningBanner.appendChild(div);if(type==='error')div.style='background:red;padding:10px';else{if(type==='warning')div.style='background:yellow;padding:10px';setTimeout(()=>{warningBanner.removeChild(div);upd();},5000);}upd();}
+    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var meta=document.createElement('meta');meta.name='viewport';meta.content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';document.getElementsByTagName('head')[0].appendChild(meta);document.querySelector("#unity-container").className="unity-mobile";canvas.className="unity-mobile";canvas.style.width="100%";canvas.style.height="100%";canvas.style.position="fixed";}else{canvas.style.width="600px";canvas.style.height="960px";}
+    (async()=>{
+      try{
+        const blobUrl=await downloadWithProgress(DATA_URL);
+        await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src="Build/PetVsMonster.loader.js";s.onload=resolve;s.onerror=reject;document.body.appendChild(s);});
+        setStep(stepIn);
+        const config={dataUrl:blobUrl,frameworkUrl:"Build/PetVsMonster.framework.js.unityweb",codeUrl:"Build/PetVsMonster.wasm.unityweb",streamingAssetsUrl:"StreamingAssets",companyName:"DefaultCompany",productName:"Unity WebGL",productVersion:"0.0.15",showBanner:unityShowBanner};
+        const unityInstance=await createUnityInstance(canvas,config,(p)=>{setProgress(70+p*30,'Init...','');});
+        setProgress(100,'Ready!','');[stepDl,stepCo,stepIn].forEach(s=>{s.classList.add('done');s.classList.remove('active');});
+        URL.revokeObjectURL(blobUrl);
+        setTimeout(()=>{const screen=document.getElementById('custom-loading-screen');screen.classList.add('fade-out');setTimeout(()=>screen.remove(),700);},300);
+        fullscreenButton.onclick=()=>unityInstance.SetFullscreen(1);
+      }catch(err){stageEl.textContent='⚠ Error loading game';stageEl.style.color='#e8432d';sizeEl.textContent=err.message||'Please reload the page.';console.error(err);}
+    })();
+  </script>
+</body>
 </html>
