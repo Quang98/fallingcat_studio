@@ -3,18 +3,18 @@
     "id": "wizarddungeon",
     "name": "Wizard Dungeon",
     "category": "Hành động",
-    "thumbnail": "https://via.placeholder.com/400x200?text=Falling+Cat"
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
   },
   {
     "id": "petvsmonster",
     "name": "Pet Vs Monster",
     "category": "Phiêu lưu",
-    "thumbnail": "https://via.placeholder.com/400x200?text=Space+Runner"
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
   },
   {
     "id": "puzzlemaster",
     "name": "Puzzle Master",
     "category": "Puzzle",
-    "thumbnail": "https://via.placeholder.com/400x200?text=Puzzle+Master"
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
   }
 ]
