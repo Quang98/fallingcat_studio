@@ -506,7 +506,8 @@
     function renderStore(platform){
       const el = document.getElementById('storeGrid');
       el.innerHTML = ''; el.classList.remove('visible');
-      const list = allStore.filter(g => platform==='android' ? g.link_android : g.link_ios);
+      //const list = allStore.filter(g => platform==='android' ? g.link_android : g.link_ios);
+      const list = allStore.filter(g => g.link_android || g.link_ios);
       if(!list.length){ el.innerHTML='<div class="empty">Chưa có sản phẩm trên nền tảng này.</div>'; return; }
       list.forEach(g=>{
         const link = platform==='android' ? g.link_android : g.link_ios;
