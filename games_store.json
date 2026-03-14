@@ -29,16 +29,16 @@
   {
     "id": "com.itcgamestudio.backpack.apocalypse",
     "name": "Backpack Apocalypse",
-    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.arcane.hunter.soul.survivor.monster.action.shooter.rpg",
+    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.backpackapocalypse.merge.war.battle.brawl",
     "link_ios": "",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_BackpackApocalypse.png"
   },
   {
     "id": "com.itcgamestudio.windy.memories",
     "name": "Windy Memories",
-    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.arcane.hunter.soul.survivor.monster.action.shooter.rpg",
+    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.windymemories.endlessrun",
     "link_ios": "",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_WindyMemories.png"
   },
   {
     "id": "com.itcgamestudio.doom.strider",
