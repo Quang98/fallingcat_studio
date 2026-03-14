@@ -45,41 +45,41 @@
     "name": "Doom Strider",
     "link_android": "",
     "link_ios": "https://apps.apple.com/vn/app/doomstrider-battlebag-heroes/id6740755923",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_DoomStrider.png"
   },
   {
     "id": "com.itcgamestudio.dango.sort.color.match.puzzle",
     "name": "Dango Sort - Color Match Puzzle",
     "link_android": "",
     "link_ios": "https://apps.apple.com/vn/app/dango-sort-color-puzzle-game/id6615064806",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_DangoSort.png"
   },
   {
     "id": "com.itcgamestudio.zombie.hunt.3d.run.shooting",
     "name": "Zombie Hunt 3D: Run & Shooting",
     "link_android": "",
     "link_ios": "https://apps.apple.com/vn/app/zombie-hunt-3d-run-shooting/id6479971957",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_ZombieHunt.png"
   },
   {
     "id": "com.itcgamestudio.space.astro.cat.brick.breaker",
     "name": "Space Astro Cat: Brick Breaker",
     "link_android": "",
     "link_ios": "https://apps.apple.com/vn/app/space-astro-cat-brick-breaker/id6504403514",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_SpaceAstroCat.png"
   },
   {
     "id": "com.itcgamestudio.cat.screw.puzzle.nuts.bolts",
     "name": "Cat Screw Puzzle: Nuts & Bolts",
     "link_android": "",
     "link_ios": "https://apps.apple.com/vn/app/cat-screw-puzzle-nuts-bolts/id6480040525",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_CatScrewPuzzle.png"
   },
   {
     "id": "com.itcgamestudio.my.perfect.sushi.drop.merge",
     "name": "My Perfect Sushi: Drop & Merge",
     "link_android": "",
     "link_ios": "https://apps.apple.com/vn/app/my-perfect-sushi-drop-merge/id6479974597",
-    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+    "thumbnail": "logothumbnail/Logo_MyPerfectSushi.png"
   }
 ]
