@@ -1,0 +1,20 @@
+[
+  {
+    "id": "wizarddungeon",
+    "name": "Wizard Dungeon",
+    "category": "Hành động",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "petvsmonster",
+    "name": "Pet Vs Monster",
+    "category": "Phiêu lưu",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "puzzlemaster",
+    "name": "Puzzle Master",
+    "category": "Puzzle",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  }
+]
