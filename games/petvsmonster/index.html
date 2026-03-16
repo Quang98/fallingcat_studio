@@ -16,32 +16,54 @@
     }
     #custom-loading-screen.fade-out { opacity: 0; pointer-events: none; }
     .loading-title {
-      font-size: 28px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 8px;
+      font-size: 28px; font-weight: 700; letter-spacing: 4px;
+      text-transform: uppercase; margin-bottom: 8px;
       background: linear-gradient(135deg, #f5a623, #e8432d);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
     }
     .progress-container { width: 320px; }
-    .progress-labels { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .progress-labels {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-bottom: 10px;
+    }
     .progress-stage { font-size: 11px; color: #888; letter-spacing: 1px; text-transform: uppercase; }
-    .progress-percent { font-size: 22px; font-weight: 700; color: #fff; font-variant-numeric: tabular-nums; min-width: 52px; text-align: right; }
+    .progress-percent {
+      font-size: 22px; font-weight: 700; color: #fff;
+      font-variant-numeric: tabular-nums; min-width: 52px; text-align: right;
+    }
     .progress-track { width: 100%; height: 4px; background: #1e1e2e; border-radius: 2px; overflow: hidden; }
-    .progress-fill { height: 100%; width: 0%; background: linear-gradient(90deg, #e8432d, #f5a623); border-radius: 2px; transition: width 0.25s ease; position: relative; }
-    .progress-fill::after { content: ''; position: absolute; top: 0; left: -100%; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); animation: shimmer 1.5s ease infinite; }
+    .progress-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, #e8432d, #f5a623);
+      border-radius: 2px; transition: width 0.25s ease; position: relative;
+    }
+    .progress-fill::after {
+      content: ''; position: absolute; top: 0; left: -100%; right: 0; bottom: 0;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+      animation: shimmer 1.5s ease infinite;
+    }
     @keyframes shimmer { 0% { left: -100%; } 100% { left: 100%; } }
     .steps { display: flex; gap: 8px; margin-top: 20px; align-items: center; }
     .step { display: flex; align-items: center; gap: 6px; font-size: 11px; color: #444; transition: color 0.4s; }
     .step.done { color: #4caf50; } .step.active { color: #f5a623; }
-    .step-dot { width: 6px; height: 6px; border-radius: 50%; background: #333; transition: background 0.4s; flex-shrink: 0; }
+    .step-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: #333; transition: background 0.4s; flex-shrink: 0;
+    }
     .step.done .step-dot { background: #4caf50; }
     .step.active .step-dot { background: #f5a623; animation: blink 0.8s ease infinite alternate; }
     @keyframes blink { from { opacity: 1; } to { opacity: 0.3; } }
     .step-sep { width: 16px; height: 1px; background: #333; }
-    .size-info { margin-top: 14px; font-size: 11px; color: #555; font-variant-numeric: tabular-nums; min-height: 16px; }
+    .size-info {
+      margin-top: 14px; font-size: 11px; color: #555;
+      font-variant-numeric: tabular-nums; min-height: 16px;
+    }
     #unity-container { display: flex; flex-direction: column; align-items: center; }
     #unity-canvas { display: block; }
   </style>
 </head>
 <body style="padding: 0; border: 0; margin: 0; display: flex; flex-direction: column; align-items: center; background: #231F20;">
+
   <div id="custom-loading-screen">
     <img src="TemplateData/Logo.png" alt="Logo" width="400" style="margin-top: -80px; margin-bottom: 100px;">
     <div class="loading-title" id="game-title">Loading...</div>
@@ -61,6 +83,7 @@
       <div class="size-info" id="size-info"></div>
     </div>
   </div>
+
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas" width=600 height=960 tabindex="-1" style="background: #231F20"></canvas>
     <div id="unity-warning"></div>
@@ -70,6 +93,7 @@
       <div id="unity-build-title">Unity WebGL</div>
     </div>
   </div>
+
   <script>
     const GAME_ID = "petvsmonster";
     const GAMES_CONFIG = [
@@ -94,47 +118,243 @@
 ];
     (function() {
       const game = GAMES_CONFIG.find(g => g.id === GAME_ID);
-      if (game) { document.getElementById('game-title').textContent = game.name; document.title = game.name; }
+      if (game) {
+        document.getElementById('game-title').textContent = game.name;
+        document.title = game.name;
+      }
     })();
-    const fillEl=document.getElementById('progress-fill'), pctEl=document.getElementById('pct-label'),
-          stageEl=document.getElementById('stage-label'), sizeEl=document.getElementById('size-info'),
-          stepDl=document.getElementById('step-download'), stepCo=document.getElementById('step-compile'),
-          stepIn=document.getElementById('step-init');
-    let _pct=0;
-    function setProgress(pct,label,sizeText){_pct=Math.max(_pct,Math.min(100,pct));fillEl.style.width=_pct+'%';pctEl.textContent=Math.round(_pct)+'%';if(label!==undefined)stageEl.textContent=label;if(sizeText!==undefined)sizeEl.textContent=sizeText;}
-    function setStep(which){[stepDl,stepCo,stepIn].forEach((s,i,arr)=>{s.classList.remove('done','active');if(i<arr.indexOf(which))s.classList.add('done');if(s===which)s.classList.add('active');});}
-    function fmtMB(b){return(b/1048576).toFixed(1)+' MB';}
-    const DATA_URL="https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.data.unityweb";
-    async function downloadWithProgress(url){
-      setStep(stepDl);setProgress(0,'Loading...','Connecting...');
-      let total=0;
-      try{const head=await fetch(url,{method:'HEAD'});const cl=head.headers.get('Content-Length');if(cl)total=parseInt(cl,10);}catch(_){}
-      if(total)sizeEl.textContent='0 MB / '+fmtMB(total);
-      const response=await fetch(url);if(!response.ok)throw new Error('HTTP '+response.status);
-      if(!total){const cl=response.headers.get('Content-Length');if(cl)total=parseInt(cl,10);}
-      const reader=response.body.getReader();const chunks=[];let received=0;
-      while(true){const{done,value}=await reader.read();if(done)break;chunks.push(value);received+=value.length;
-        const sizeText=total?fmtMB(received)+' / '+fmtMB(total):fmtMB(received)+' downloaded';
-        setProgress(total?(received/total)*70:Math.min(65,_pct+0.15),'Loading...',sizeText);}
-      const merged=new Uint8Array(received);let offset=0;for(const c of chunks){merged.set(c,offset);offset+=c.length;}
-      setProgress(70,'Loading Done!',fmtMB(received)+' / '+fmtMB(received));setStep(stepCo);
-      return URL.createObjectURL(new Blob([merged]));
+
+    const fillEl   = document.getElementById('progress-fill');
+    const pctEl    = document.getElementById('pct-label');
+    const stageEl  = document.getElementById('stage-label');
+    const sizeEl   = document.getElementById('size-info');
+    const stepDl   = document.getElementById('step-download');
+    const stepCo   = document.getElementById('step-compile');
+    const stepIn   = document.getElementById('step-init');
+    let _pct = 0;
+
+    function setProgress(pct, label, sizeText) {
+      _pct = Math.max(_pct, Math.min(100, pct));
+      fillEl.style.width = _pct + '%';
+      pctEl.textContent  = Math.round(_pct) + '%';
+      if (label    !== undefined) stageEl.textContent = label;
+      if (sizeText !== undefined) sizeEl.textContent  = sizeText;
     }
-    var canvas=document.querySelector("#unity-canvas"),fullscreenButton=document.querySelector("#unity-fullscreen-button"),warningBanner=document.querySelector("#unity-warning");
-    function unityShowBanner(msg,type){function upd(){warningBanner.style.display=warningBanner.children.length?'block':'none';}var div=document.createElement('div');div.innerHTML=msg;warningBanner.appendChild(div);if(type==='error')div.style='background:red;padding:10px';else{if(type==='warning')div.style='background:yellow;padding:10px';setTimeout(()=>{warningBanner.removeChild(div);upd();},5000);}upd();}
-    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var meta=document.createElement('meta');meta.name='viewport';meta.content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';document.getElementsByTagName('head')[0].appendChild(meta);document.querySelector("#unity-container").className="unity-mobile";canvas.className="unity-mobile";canvas.style.width="100%";canvas.style.height="100%";canvas.style.position="fixed";}else{canvas.style.width="600px";canvas.style.height="960px";}
-    (async()=>{
-      try{
-        const blobUrl=await downloadWithProgress(DATA_URL);
-        await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src="Build/PetVsMonster.loader.js";s.onload=resolve;s.onerror=reject;document.body.appendChild(s);});
+
+    function setStep(which) {
+      [stepDl, stepCo, stepIn].forEach((s, i, arr) => {
+        s.classList.remove('done', 'active');
+        if (i < arr.indexOf(which)) s.classList.add('done');
+        if (s === which)            s.classList.add('active');
+      });
+    }
+
+    function fmtMB(b) { return (b / 1048576).toFixed(1) + ' MB'; }
+
+    // ── URLs của 3 file nặng cần track progress ──────────────────────────
+    const URLS = {
+      data:      "https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.data.unityweb",
+      framework: "https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.framework.js.unityweb",
+      wasm:      "https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.wasm.unityweb",
+    };
+
+    // Trọng số download: .data thường lớn nhất (~70%), wasm ~20%, framework ~10%
+    // Sẽ tự cân chỉnh theo Content-Length thực tế nếu server trả về
+    const WEIGHTS = { data: 0.70, framework: 0.10, wasm: 0.20 };
+
+    // ── Fetch HEAD để lấy Content-Length ─────────────────────────────────
+    async function getSize(url) {
+      try {
+        const r = await fetch(url, { method: 'HEAD' });
+        const cl = r.headers.get('Content-Length');
+        return cl ? parseInt(cl, 10) : 0;
+      } catch(_) { return 0; }
+    }
+
+    // ── Download một file với streaming progress ──────────────────────────
+    // onProgress(receivedBytes, totalBytes|0)
+    async function fetchWithProgress(url, onProgress) {
+      const response = await fetch(url);
+      if (!response.ok) throw new Error('HTTP ' + response.status + ' — ' + url);
+      let total = parseInt(response.headers.get('Content-Length') || '0', 10);
+      const reader = response.body.getReader();
+      const chunks = [];
+      let received = 0;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        chunks.push(value);
+        received += value.length;
+        onProgress(received, total);
+      }
+      const buf = new Uint8Array(received);
+      let off = 0;
+      for (const c of chunks) { buf.set(c, off); off += c.length; }
+      return buf;
+    }
+
+    // ── Download .data + .framework + .wasm song song ─────────────────────
+    // Progress tổng = Σ (bytes_nhận_được[i] / total[i]) * weight[i]  × 75%
+    async function downloadAllWithProgress() {
+      setStep(stepDl);
+      setProgress(0, 'Connecting...', '');
+
+      // 1. Lấy kích thước thực tế để tính weight chính xác
+      const [sData, sFramework, sWasm] = await Promise.all([
+        getSize(URLS.data), getSize(URLS.framework), getSize(URLS.wasm),
+      ]);
+      const totalKnown = sData + sFramework + sWasm;
+      // Nếu biết kích thước → dùng tỉ lệ thực; nếu không → dùng weight mặc định
+      const W = totalKnown > 0
+        ? { data: sData / totalKnown, framework: sFramework / totalKnown, wasm: sWasm / totalKnown }
+        : WEIGHTS;
+
+      // Bytes đã nhận cho từng file
+      const recv  = { data: 0, framework: 0, wasm: 0 };
+      const total = { data: sData, framework: sFramework, wasm: sWasm };
+
+      function recalcProgress() {
+        let weighted = 0;
+        for (const k of ['data','framework','wasm']) {
+          const t = total[k];
+          weighted += t > 0 ? (recv[k] / t) * W[k] : W[k] * (recv[k] > 0 ? 0.9 : 0);
+        }
+        const dlPct = weighted * 75; // download phase chiếm 0–75%
+
+        const totalRecv  = recv.data  + recv.framework  + recv.wasm;
+        const totalBytes = total.data + total.framework + total.wasm;
+        const sizeText   = totalBytes > 0
+          ? fmtMB(totalRecv) + ' / ' + fmtMB(totalBytes)
+          : fmtMB(totalRecv) + ' downloaded';
+        setProgress(dlPct, 'Downloading...', sizeText);
+      }
+
+      // 2. Download song song
+      const [bufData, bufFramework, bufWasm] = await Promise.all([
+        fetchWithProgress(URLS.data,      (r, t) => { recv.data      = r; if(t) total.data      = t; recalcProgress(); }),
+        fetchWithProgress(URLS.framework, (r, t) => { recv.framework = r; if(t) total.framework = t; recalcProgress(); }),
+        fetchWithProgress(URLS.wasm,      (r, t) => { recv.wasm      = r; if(t) total.wasm      = t; recalcProgress(); }),
+      ]);
+
+      setProgress(75, 'Download complete!', fmtMB(bufData.length + bufFramework.length + bufWasm.length) + ' loaded');
+      setStep(stepCo);
+
+      return {
+        dataBlob:      URL.createObjectURL(new Blob([bufData])),
+        frameworkBlob: URL.createObjectURL(new Blob([bufFramework])),
+        wasmBlob:      URL.createObjectURL(new Blob([bufWasm])),
+      };
+    }
+
+    // ── Fake progress mượt trong lúc Unity compile (75→90%) ──────────────
+    // Unity đôi khi không gọi progress callback trong thời gian compile WASM
+    // → chạy một ticker tăng chậm để UX không bị đứng hình
+    let _fakeTimer = null;
+    function startFakeCompileProgress() {
+      _fakeTimer = setInterval(() => {
+        if (_pct < 90) setProgress(_pct + 0.3, 'Compiling...', '');
+        else           stopFakeCompileProgress();
+      }, 80);
+    }
+    function stopFakeCompileProgress() {
+      if (_fakeTimer) { clearInterval(_fakeTimer); _fakeTimer = null; }
+    }
+
+    var canvas           = document.querySelector("#unity-canvas");
+    var fullscreenButton = document.querySelector("#unity-fullscreen-button");
+    var warningBanner    = document.querySelector("#unity-warning");
+
+    function unityShowBanner(msg, type) {
+      function upd() { warningBanner.style.display = warningBanner.children.length ? 'block' : 'none'; }
+      var div = document.createElement('div');
+      div.innerHTML = msg;
+      warningBanner.appendChild(div);
+      if (type === 'error') {
+        div.style = 'background:red;padding:10px';
+      } else {
+        if (type === 'warning') div.style = 'background:yellow;padding:10px';
+        setTimeout(() => { warningBanner.removeChild(div); upd(); }, 5000);
+      }
+      upd();
+    }
+
+    if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+      var meta = document.createElement('meta');
+      meta.name    = 'viewport';
+      meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+      document.getElementsByTagName('head')[0].appendChild(meta);
+      document.querySelector("#unity-container").className = "unity-mobile";
+      canvas.className      = "unity-mobile";
+      canvas.style.width    = "100%";
+      canvas.style.height   = "100%";
+      canvas.style.position = "fixed";
+    } else {
+      canvas.style.width  = "600px";
+      canvas.style.height = "960px";
+    }
+
+    (async () => {
+      try {
+        // Phase 1: download .data + .framework + .wasm song song (0–75%)
+        const blobs = await downloadAllWithProgress();
+
+        // Phase 2: load loader.js
+        await new Promise((resolve, reject) => {
+          const s = document.createElement('script');
+          s.src     = "https://game-asset-proxy.daoquang-nvm.workers.dev/PetVsMonster.loader.js";
+          s.onload  = resolve;
+          s.onerror = reject;
+          document.body.appendChild(s);
+        });
+
+        // Phase 3: Unity compile + init (75–100%)
+        // Dùng blob URL cho cả 3 file → Unity không re-download
         setStep(stepIn);
-        const config={dataUrl:blobUrl,frameworkUrl:"Build/PetVsMonster.framework.js.unityweb",codeUrl:"Build/PetVsMonster.wasm.unityweb",streamingAssetsUrl:"StreamingAssets",companyName:"DefaultCompany",productName:"Unity WebGL",productVersion:"0.0.15",showBanner:unityShowBanner};
-        const unityInstance=await createUnityInstance(canvas,config,(p)=>{setProgress(70+p*30,'Init...','');});
-        setProgress(100,'Ready!','');[stepDl,stepCo,stepIn].forEach(s=>{s.classList.add('done');s.classList.remove('active');});
-        URL.revokeObjectURL(blobUrl);
-        setTimeout(()=>{const screen=document.getElementById('custom-loading-screen');screen.classList.add('fade-out');setTimeout(()=>screen.remove(),700);},300);
-        fullscreenButton.onclick=()=>unityInstance.SetFullscreen(1);
-      }catch(err){stageEl.textContent='⚠ Error loading game';stageEl.style.color='#e8432d';sizeEl.textContent=err.message||'Please reload the page.';console.error(err);}
+        startFakeCompileProgress();
+
+        const config = {
+          dataUrl:            blobs.dataBlob,
+          frameworkUrl:       blobs.frameworkBlob,
+          codeUrl:            blobs.wasmBlob,
+          streamingAssetsUrl: "StreamingAssets",
+          companyName:        "DefaultCompany",
+          productName:        "Unity WebGL",
+          productVersion:     "0.0.15",
+          showBanner:         unityShowBanner,
+        };
+
+        const unityInstance = await createUnityInstance(canvas, config, (p) => {
+          // p: 0.0–1.0, ánh xạ vào 75–100%
+          stopFakeCompileProgress();
+          setProgress(75 + p * 25, p < 0.5 ? 'Compiling...' : 'Initializing...', '');
+        });
+
+        stopFakeCompileProgress();
+        setProgress(100, 'Ready!', '');
+        [stepDl, stepCo, stepIn].forEach(s => {
+          s.classList.add('done');
+          s.classList.remove('active');
+        });
+
+        // Giải phóng blob URLs
+        URL.revokeObjectURL(blobs.dataBlob);
+        URL.revokeObjectURL(blobs.frameworkBlob);
+        URL.revokeObjectURL(blobs.wasmBlob);
+
+        setTimeout(() => {
+          const screen = document.getElementById('custom-loading-screen');
+          screen.classList.add('fade-out');
+          setTimeout(() => screen.remove(), 700);
+        }, 300);
+
+        fullscreenButton.onclick = () => unityInstance.SetFullscreen(1);
+
+      } catch (err) {
+        stageEl.textContent = '⚠ Error loading game';
+        stageEl.style.color = '#e8432d';
+        sizeEl.textContent  = err.message || 'Please reload the page.';
+        console.error(err);
+      }
     })();
   </script>
 </body>
