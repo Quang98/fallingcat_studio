@@ -62,7 +62,7 @@
     </div>
   </div>
   <div id="unity-container" class="unity-desktop">
-    <canvas id="unity-canvas" width=960 height=600 tabindex="-1" style="background: #231F20"></canvas>
+    <canvas id="unity-canvas" width=1920 height=1080 tabindex="-1" style="background: #231F20"></canvas>
     <div id="unity-warning"></div>
     <div id="unity-footer">
       <div id="unity-webgl-logo"></div>
@@ -128,7 +128,7 @@
     }
     var canvas=document.querySelector("#unity-canvas"),fullscreenButton=document.querySelector("#unity-fullscreen-button"),warningBanner=document.querySelector("#unity-warning");
     function unityShowBanner(msg,type){function upd(){warningBanner.style.display=warningBanner.children.length?'block':'none';}var div=document.createElement('div');div.innerHTML=msg;warningBanner.appendChild(div);if(type==='error')div.style='background:red;padding:10px';else{if(type==='warning')div.style='background:yellow;padding:10px';setTimeout(()=>{warningBanner.removeChild(div);upd();},5000);}upd();}
-    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var meta=document.createElement('meta');meta.name='viewport';meta.content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';document.getElementsByTagName('head')[0].appendChild(meta);document.querySelector("#unity-container").className="unity-mobile";canvas.className="unity-mobile";canvas.style.width="100%";canvas.style.height="100%";canvas.style.position="fixed";}else{canvas.style.width="960px";canvas.style.height="600px";}
+    if(/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)){var meta=document.createElement('meta');meta.name='viewport';meta.content='width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';document.getElementsByTagName('head')[0].appendChild(meta);document.querySelector("#unity-container").className="unity-mobile";canvas.className="unity-mobile";canvas.style.width="100%";canvas.style.height="100%";canvas.style.position="fixed";}else{canvas.style.width="1920px";canvas.style.height="1080px";}
     (async()=>{
       try{
         const blobUrl=await downloadWithProgress(DATA_URL);
