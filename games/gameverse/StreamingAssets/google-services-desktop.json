@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "393716755855",
+    "project_id": "arcane-hunter",
+    "storage_bucket": "arcane-hunter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:393716755855:android:3f80ddd92b28b45f60affa",
+        "android_client_info": {
+          "package_name": "com.itcgamestudio.arcane.hunter.soul.survivor.monster.action.shooter.rpg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "393716755855-bg9oqaq5mj2ho798r0j36kts3951fo15.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDPTmHEbrF4n0HklXYJp11G8g_Q-JFpCA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "393716755855-2fnobp0tg4uqu8rh7r35lfe5p2ffohtf.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "393716755855-19tr4b0ej3g0fdrn9m6v8mjp93nkcgkk.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.itcgamestudio.arcane.hunter.soul.survivor.monster.action.shooter.rpg"
+              }
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-2150063081064097~9507363548"
+    }
+  ],
+  "configuration_version": "1"
+}

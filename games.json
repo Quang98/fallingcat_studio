@@ -16,5 +16,11 @@
     "name": "Puzzle Master",
     "category": "Puzzle",
     "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "gameverse",
+    "name": "Game Verse",
+    "category": "Puzzle",
+    "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
   }
 ]
