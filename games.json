@@ -22,5 +22,11 @@
     "name": "Game Verse",
     "category": "Puzzle",
     "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "sushi",
+    "name": "Sushi Perfect",
+    "category": "Hành động",
+    "thumbnail": "logothumbnail/Logo_Sushi.png"
   }
 ]
