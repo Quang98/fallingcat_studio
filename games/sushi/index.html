@@ -1,40 +1,651 @@
 <!DOCTYPE html>
-<html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | Sushi Perfect</title>
-  </head>
-  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
-    <canvas id="unity-canvas" width=600 height=960 tabindex="-1" style="width: 600px; height: 960px; background: #231F20"></canvas>
-    <script src="https://game-asset-proxy.daoquang-nvm.workers.dev/Sushi.loader.js"></script>
-    <script>
-      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        // Mobile device style: fill the whole browser client area with the game canvas:
-        var meta = document.createElement('meta');
-        meta.name = 'viewport';
-        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-        document.getElementsByTagName('head')[0].appendChild(meta);
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, viewport-fit=cover">
+<title>Đại Tiệc Dự Đoán</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+<div class="phone-wrap"><div class="phone">
+<div class="screens" id="screens">
 
-        var canvas = document.querySelector("#unity-canvas");
-        canvas.style.width = "100%";
-        canvas.style.height = "100%";
-        canvas.style.position = "fixed";
+<!-- HUB -->
+<div class="screen active" id="screen-hub">
+  <div style="flex:1;overflow-y:auto">
+    <div class="top-bar">
+      <h1>Đại Tiệc Dự Đoán</h1>
 
-        document.body.style.textAlign = "left";
-      }
+    </div>
+    <!-- Points banner -->
+    <div class="hub-pts">
+      <div class="hub-pts-left">
+        <div class="hub-pts-star">★</div>
+        <div>
+          <div class="hub-pts-num"><span data-points-balance>0</span></div>
+          <div class="hub-pts-sublbl">ĐIỂM TÍCH LŨY</div>
+        </div>
+      </div>
+      <button class="hub-pts-action" onclick="goScreen('screen-shop')">Đổi thưởng →</button>
+    </div>
+    <!-- 3 currency chips -->
+    <div class="hub-curr-row">
+      <button class="hub-curr-chip" onclick="goScreen('screen-nap')"><img src="assets/Ve_du_doan.png"><span class="hub-curr-num" data-ticket-balance>0</span><span class="hub-curr-plus">+</span></button>
+      <button class="hub-curr-chip" onclick="goScreen('screen-shop')"><img src="assets/Ve_Minigame.png"><span class="hub-curr-num" data-minigame-balance>0</span><span class="hub-curr-plus">+</span></button>
+      <button class="hub-curr-chip" onclick="goScreen('screen-shop')"><img src="assets/Ve_may_man.png"><span class="hub-curr-num" data-lucky-balance>18</span><span class="hub-curr-plus">+</span></button>
+    </div>
+    <div class="banner-card" id="hub-banner" onclick="hubBannerClick()">
+      <div>
+        <div class="banner-eyebrow" id="hub-banner-eyebrow">TRẬN TÂM ĐIỂM</div>
+        <div class="banner-title" id="hub-banner-title">FRA vs GER</div>
+        <div class="banner-sub">Dự đoán trước giờ lăn bóng!</div>
+        <button class="btn-join">Dự đoán ngay →</button>
+      </div>
+      <div class="banner-ball"><img src="assets/hub_bong_icon.png"></div>
+    </div>
+    <div class="section-label">CHƠI NGAY</div>
+    <div class="grid-2">
+      <button class="grid-item gold" onclick="openMinigame()">
+        <div class="grid-item-icon"><img src="assets/hub_minigame_icon.png"></div>
+        <div class="grid-item-title">Suika<br>Bóng đá</div>
+        <div class="grid-item-arrow">→</div>
+      </button>
+      <button class="grid-item" onclick="goScreen('screen-matches')">
+        <div class="grid-item-icon"><img src="assets/hub_dudoan_icon.png"></div>
+        <div class="grid-item-title">Dự đoán<br>trận đấu</div>
+        <div class="grid-item-arrow">→</div>
+      </button>
+      <button class="grid-item gold" onclick="goScreen('screen-spin')">
+        <div class="grid-item-icon"><img src="assets/hub_vongquaymayman_icon.png"></div>
+        <div class="grid-item-title">Vòng quay<br>may mắn</div>
+        <div class="grid-item-arrow">→</div>
+      </button>
+      <button class="grid-item" onclick="goScreen('screen-shop')">
+        <div class="grid-item-icon"><img src="assets/hub_shop_icon.png"></div>
+        <div class="grid-item-title">Shop<br>đổi thưởng</div>
+        <div class="grid-item-arrow">→</div>
+      </button>
+    </div>
+    <div class="live-card" id="hub-live-card" onclick="hubLiveClick()" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+        <span style="font-size:11px;font-weight:800;letter-spacing:0.6px;color:#ff4d4d">ĐANG DIỄN RA <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:#ff4d4d;vertical-align:middle;margin-left:2px;animation:pulse 1.2s infinite"></span></span>
+        <span id="hub-live-info" style="font-size:11px;color:var(--t2)"></span>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:8px">
+        <div style="display:flex;align-items:center;gap:8px">
+          <div id="hub-live-home-flag" class="mc-flag"></div>
+          <div id="hub-live-home-name" style="font-size:15px;font-weight:700;color:white"></div>
+        </div>
+        <div class="live-score-big" id="hub-live-score">– –</div>
+        <div style="display:flex;align-items:center;gap:8px">
+          <div id="hub-live-away-name" style="font-size:15px;font-weight:700;color:white"></div>
+          <div id="hub-live-away-flag" class="mc-flag"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "https://game-asset-proxy.daoquang-nvm.workers.dev/Sushi.data.unityweb",
-        frameworkUrl: "https://game-asset-proxy.daoquang-nvm.workers.dev/Sushi.framework.js.unityweb",
-        codeUrl: "https://game-asset-proxy.daoquang-nvm.workers.dev/Sushi.wasm.unityweb",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "SimpStudio",
-        productName: "Sushi Perfect",
-        productVersion: "2.0.46",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
-    </script>
-  </body>
+<!-- MATCHES -->
+<div class="screen" id="screen-matches">
+  <div class="back-header">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Danh sách trận</h2>
+  </div>
+  <div style="margin:0 16px 14px;background:var(--card);border:1px solid rgba(255,255,255,0.12);border-radius:12px;display:flex">
+    <div style="flex:1;padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:3px">
+      <span><img src="assets/Ve_du_doan.png" style="height:22px;vertical-align:middle"></span>
+      <span style="font-size:16px;font-weight:800;color:white" id="matches-tickets" data-ticket-balance>0</span>
+      <span style="font-size:10px;font-weight:600;color:var(--t2)">Vé cược</span>
+    </div>
+    <div style="width:1px;background:rgba(255,255,255,0.1);margin:10px 0"></div>
+    <div style="flex:1;padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:3px">
+      <span style="font-size:18px;color:var(--gold)">★</span>
+      <span style="font-size:16px;font-weight:800;color:var(--gold)" id="matches-points" data-points-balance>0</span>
+      <span style="font-size:10px;font-weight:600;color:var(--t2)">Điểm</span>
+    </div>
+  </div>
+  <div class="filter-row">
+    <button class="ftab active" onclick="filterMatches('upcoming',this)">Hôm nay</button>
+    <button class="ftab" onclick="filterMatches('all',this)">Tuần này</button>
+    <button class="ftab" onclick="filterMatches('group',this)">Vòng bảng</button>
+    <button class="ftab" onclick="filterMatches('knockout',this)">Knock-out</button>
+  </div>
+  <div id="matches-list" style="flex:1;overflow-y:auto;padding-bottom:20px"></div>
+</div>
+
+<!-- PREDICT -->
+<div class="screen" id="screen-predict">
+  <div class="back-header">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Đặt dự đoán</h2>
+    <div class="predict-header-meta">
+      <span><img src="assets/Ve_du_doan.png" style="height:15px;vertical-align:middle"> <span id="predict-tickets-remaining" data-ticket-balance>–</span> vé</span>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <!-- Match info card -->
+    <div class="predict-card" id="predict-card-box">
+      <span class="predict-placed-badge" id="predict-placed-badge" style="display:none">✓ ĐÃ ĐẶT</span>
+      <div class="predict-eyebrow" id="predict-round-label">BẢNG A · LƯỢT 2</div>
+      <div class="predict-teams">
+        <div class="pt-team">
+          <div class="pt-flag" id="predict-home-flag" style="background:#009c3b">BRA</div>
+          <div class="pt-name" id="predict-home-name">Brazil</div>
+        </div>
+        <div class="pt-vs">vs</div>
+        <div class="pt-team right">
+          <div class="pt-name" id="predict-away-name">Argentina</div>
+          <div class="pt-flag" id="predict-away-flag" style="background:#74acdf">ARG</div>
+        </div>
+      </div>
+      <div class="predict-kick" id="predict-kickoff-info">Bắt đầu 18:00 hôm nay · Khóa 17:55</div>
+      <div class="predict-community">
+        <div class="predict-community-lbl" id="community-lbl">💬 Cộng đồng đang chọn</div>
+        <div class="comm-bar">
+          <div class="comm-bar-seg comm-bar-home" id="community-fill" style="width:62%"></div>
+          <div class="comm-bar-seg comm-bar-draw" id="community-fill-draw" style="width:23%"></div>
+          <div class="comm-bar-seg comm-bar-away" id="community-fill-away" style="width:15%"></div>
+        </div>
+        <div class="comm-labels">
+          <div class="comm-label"><div class="comm-dot comm-dot-home"></div><span id="community-text" style="color:#3DD68C">Brazil 62%</span></div>
+          <div class="comm-label"><div class="comm-dot comm-dot-draw"></div><span id="community-draw-pct" style="color:#F5C842">Hòa 23%</span></div>
+          <div class="comm-label"><div class="comm-dot comm-dot-away"></div><span id="community-away-pct" style="color:#5B9BF5">Argentina 15%</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- Đã dự đoán (read-only) -->
+    <div class="placed-card" id="placed-pred-card" style="display:none">
+      <div class="placed-card-title">✓ DỰ ĐOÁN CỦA BẠN</div>
+      <div class="placed-card-score" id="placed-outcome-display" style="font-size:20px;font-weight:800;color:white;text-align:center;padding:4px 0">–</div>
+      <div class="placed-card-meta" id="placed-meta">Đã trừ 1 vé dự đoán</div>
+    </div>
+    <!-- Trận đã khóa kèo -->
+    <div class="lock-card" id="locked-pred-card" style="display:none">
+      <div class="lock-card-icon">🔒</div>
+      <div class="lock-card-title">Trận đã khóa kèo</div>
+      <div class="lock-card-sub" id="locked-pred-sub">Đã quá 17:55 — không thể đặt dự đoán</div>
+    </div>
+    <!-- Outcome selection -->
+    <div class="outcome-section" id="score-section">
+      <div class="outcome-label-txt">DỰ ĐOÁN KẾT QUẢ TRẬN ĐẤU</div>
+      <div class="outcome-grid">
+        <button class="outcome-btn" id="outcome-home" onclick="selectOutcome('home',this)">
+          <div class="outcome-btn-icon" id="outcome-home-icon"></div>
+          <div class="outcome-btn-label" id="outcome-home-label">Đội nhà thắng</div>
+          <div class="outcome-btn-pct" id="outcome-home-pct">💬 –</div>
+        </button>
+        <button class="outcome-btn" id="outcome-draw" onclick="selectOutcome('draw',this)">
+          <div class="outcome-btn-icon" style="font-size:22px;font-weight:900;color:var(--t2)">✕</div>
+          <div class="outcome-btn-label">Hòa</div>
+          <div class="outcome-btn-pct" id="outcome-draw-pct">💬 –</div>
+        </button>
+        <button class="outcome-btn" id="outcome-away" onclick="selectOutcome('away',this)">
+          <div class="outcome-btn-icon" id="outcome-away-icon"></div>
+          <div class="outcome-btn-label" id="outcome-away-label">Đội khách thắng</div>
+          <div class="outcome-btn-pct" id="outcome-away-pct">💬 –</div>
+        </button>
+      </div>
+    </div>
+    <!-- Confident -->
+    <div class="conf-row" id="confident-card" onclick="toggleConfident(this)">
+      <div>
+        <div class="conf-label" id="predict-conf-label">SỰ TỰ TIN ×2</div>
+        <div class="conf-sub" id="predict-conf-sub">Dùng thêm 1 vé cược · Trúng nhân đôi điểm</div>
+      </div>
+      <div class="toggle" id="conf-toggle"><div class="toggle-knob"></div></div>
+    </div>
+    <!-- Points preview -->
+    <div class="pts-prev" id="pts-prev-wrap">
+      <div>
+        <div class="pts-prev-label">ĐIỂM NẾU TRÚNG ĐÚNG TỈ SỐ</div>
+        <div class="pts-prev-num" id="pts-preview-num">50</div>
+        <div style="font-size:12px;color:var(--t2);margin-top:2px" id="pts-preview-formula">= 50 ×1</div>
+      </div>
+      <div class="pts-prev-break" id="pts-breakdown">+ Bonus bảng A ·+1<br>+ Đoán sớm 24h ·+5</div>
+    </div>
+    <!-- CTA -->
+    <button class="cta" id="predict-cta-btn" onclick="confirmPredict()">ĐẶT DỰ ĐOÁN · 1 <img src="assets/Ve_du_doan.png" style="height:18px;vertical-align:middle"></button>
+    <div class="cta-note" id="predict-lock-note">Khóa kéo lúc 17:55. Sau thời gian này không sửa được.</div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="screen" id="screen-success">
+  <div class="back-header">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Kết quả &amp; điểm</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div class="result-card">
+      <div style="text-align:center">
+        <span class="result-badge pending" id="result-badge">ĐÃ GHI NHẬN</span>
+      </div>
+      <div class="result-round" id="result-round">BÁN KẾT</div>
+      <div class="result-teams">
+        <div class="rt-team">
+          <div class="pt-flag" id="result-home-flag" style="background:#009c3b">BRA</div>
+          <div style="font-size:18px;font-weight:800;color:white" id="result-home-short">BRA</div>
+        </div>
+        <div class="result-score" id="result-score">2 – 1</div>
+        <div class="rt-team right">
+          <div style="font-size:18px;font-weight:800;color:white" id="result-away-short">ARG</div>
+          <div class="pt-flag" id="result-away-flag" style="background:#74acdf">ARG</div>
+        </div>
+      </div>
+      <div class="result-your">
+        <div>
+          <div class="result-your-lbl">BẠN ĐOÁN</div>
+          <div class="result-your-val" id="result-your-score">2 – 1</div>
+        </div>
+        <span class="conf-badge" id="result-conf-badge" style="display:none">SỰ TỰ TIN ×2</span>
+      </div>
+    </div>
+    <div class="pts-result">
+      <div>
+        <div class="pts-result-lbl">ĐIỂM DỰ ĐOÁN</div>
+        <div class="pts-result-num" id="result-pts">+1 <img src="assets/Ve_du_doan.png" style="height:18px;vertical-align:middle"></div>
+      </div>
+      <div class="pts-result-break" id="result-pts-breakdown">Điểm sẽ cộng sau<br>khi có kết quả chính thức</div>
+    </div>
+    <div class="hist-section">
+      <div class="hist-hdr"><span>LỊCH SỬ GẦN NHẤT</span><a href="#">Xem tất cả →</a></div>
+      <div class="hist-row">
+        <div><div class="hist-match">ENG vs GER</div><div class="hist-scores">Bạn: 1–1 · Thực: 1–1</div></div>
+        <div class="hist-pts win">+50 ✓</div>
+      </div>
+      <div class="hist-row">
+        <div><div class="hist-match">FRA vs ESP</div><div class="hist-scores">Bạn: 2–0 · Thực: 1–1</div></div>
+        <div class="hist-pts miss">0 ✗</div>
+      </div>
+      <div class="hist-row">
+        <div><div class="hist-match">POR vs NED</div><div class="hist-scores">Bạn: 3–2 · Thực: 3–2</div></div>
+        <div class="hist-pts win">+100 ✓</div>
+      </div>
+    </div>
+    <div style="padding:0 16px 24px">
+      <button class="cta" onclick="goScreen('screen-matches')">Đặt dự đoán trận tiếp theo</button>
+    </div>
+  </div>
+</div>
+
+<!-- SPIN -->
+<div class="screen" id="screen-spin">
+  <div class="back-header center">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Vòng quay may mắn</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div class="spin-ticket-pill"><img src="assets/Ve_may_man.png"><span data-lucky-balance>18</span></div>
+    <div style="display:flex;flex-direction:column;align-items:center;padding:64px 20px 8px;gap:24px">
+      <div style="position:relative;width:280px;height:280px">
+        <!-- Pointer arrow: nằm cao hẳn phía trên vòng quay -->
+        <div style="position:absolute;top:-46px;left:50%;transform:translateX(-50%);font-size:32px;color:var(--red);filter:drop-shadow(0 2px 4px rgba(0,0,0,0.5));z-index:2">▼</div>
+        <!-- Bánh xe: background + label cùng xoay -->
+        <div id="wheel" class="spin-wheel" style="transition:transform 3s cubic-bezier(0.17,0.67,0.12,0.99)">
+          <div style="position:absolute;inset:0;background:repeating-conic-gradient(from -1.5deg,#D4A017 0deg 3deg,#17402A 3deg 45deg)"></div>
+          <!-- 8 segment, theo chiều kim đồng hồ từ trên-phải (tâm 130,130 trong viền) -->
+          <div class="spin-seg" style="left:164px;top:49px">★ 1</div>
+          <div class="spin-seg spin-seg-k" style="left:211px;top:96px">₭</div>
+          <div class="spin-seg" style="left:211px;top:164px">★ 2</div>
+          <div class="spin-seg" style="left:164px;top:211px">★ 5</div>
+          <div class="spin-seg" style="left:96px;top:211px">★ 10</div>
+          <div class="spin-seg" style="left:49px;top:164px">🔊</div>
+          <div class="spin-seg" style="left:49px;top:96px">👕</div>
+          <div class="spin-seg spin-seg-k" style="left:96px;top:49px">₭</div>
+        </div>
+        <!-- Overlay tĩnh: nút trung tâm không xoay -->
+        <div style="position:absolute;inset:0;pointer-events:none;z-index:1">
+          <div style="position:absolute;left:140px;top:140px;transform:translate(-50%,-50%);width:54px;height:54px;background:var(--gold);border-radius:50%;border:4px solid white"></div>
+        </div>
+      </div>
+      <button class="btn-spin-cta" onclick="spinWheel()">QUAY · 1 <img src="assets/Ve_may_man.png"></button>
+      <div class="spin-caption">200đ/vé · tối đa 100 vé/ngày</div>
+    </div>
+    <div style="padding:0 16px 20px">
+      <div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--t2);margin-bottom:10px">TẤT CẢ GIẢI</div>
+      <div class="prize-grid" id="wheel-prize-grid">
+        <div class="prize-row">⭐ ×1</div>
+        <div class="prize-row">⭐ ×2</div>
+        <div class="prize-row">⭐ ×5</div>
+        <div class="prize-row">⭐ ×10</div>
+        <div class="prize-row">₭ Thẻ cào +⭐20</div>
+        <div class="prize-row">₭ Thẻ cào +⭐30</div>
+        <div class="prize-row">🔊 JBL Go 4</div>
+        <div class="prize-row">👕 Áo đấu</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SHOP -->
+<div class="screen" id="screen-shop">
+  <div class="back-header center">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Shop đổi thưởng</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div class="pts-banner">
+      <div class="pts-banner-lbl">ĐIỂM TÍCH LŨY</div>
+      <div class="pts-banner-val">⭐ <span data-points-balance>0</span></div>
+    </div>
+    <div class="shop-note">ℹ️ Quy đổi điểm không ảnh hưởng tới Bảng xếp hạng</div>
+    <div class="shop-filter">
+      <button class="sftab active" data-cat="all" onclick="setSF(this)">Tất cả</button>
+      <button class="sftab" data-cat="lucky" onclick="setSF(this)">Vé may mắn</button>
+      <button class="sftab" data-cat="predict" onclick="setSF(this)">Vé dự đoán</button>
+      <button class="sftab" data-cat="card" onclick="setSF(this)">Thẻ cào</button>
+    </div>
+    <div class="shop-grid">
+      <div class="shop-card hot" data-cat="lucky"><div class="shop-badge">HOT</div><div class="shop-img"><img src="assets/Ve_may_man.png"></div><div class="shop-body"><div class="shop-name">Vé may mắn ×5</div><div class="shop-price-row"><span class="shop-pts">⭐ 50</span><button class="btn-redeem">Đổi →</button></div></div></div>
+      <div class="shop-card" data-cat="predict"><div class="shop-img"><img src="assets/Ve_du_doan.png"></div><div class="shop-body"><div class="shop-name">Vé dự đoán ×1</div><div class="shop-price-row"><span class="shop-pts">⭐ 50</span><button class="btn-redeem">Đổi →</button></div></div></div>
+      <div class="shop-card" data-cat="card"><div class="shop-img"><span class="shop-kip">₭</span></div><div class="shop-body"><div class="shop-name">Thẻ cào 20.000đ</div><div class="shop-price-row"><span class="shop-pts">⭐ 50</span><button class="btn-redeem">Đổi →</button></div></div></div>
+      <div class="shop-card" data-cat="card"><div class="shop-img"><span class="shop-kip">₭</span></div><div class="shop-body"><div class="shop-name">Thẻ cào 50.000đ</div><div class="shop-price-row"><span class="shop-pts">⭐ 4000</span><button class="btn-redeem">Đổi →</button></div></div></div>
+      <div class="shop-card" data-cat="card"><div class="shop-badge new-b">MỚI</div><div class="shop-img"><span class="shop-kip">₭</span></div><div class="shop-body"><div class="shop-name">Thẻ cào 100.000đ</div><div class="shop-price-row"><span class="shop-pts">⭐ 10000</span><button class="btn-redeem">Đổi →</button></div></div></div>
+      <div class="shop-card" data-cat="lucky"><div class="shop-img"><img src="assets/Ve_may_man.png"></div><div class="shop-body"><div class="shop-name">Vé may mắn ×20</div><div class="shop-price-row"><span class="shop-pts">⭐ 4000</span><button class="btn-redeem">Đổi →</button></div></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- LEADERBOARD -->
+<div class="screen" id="screen-lb">
+  <div class="back-header center">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Bảng xếp hạng</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div class="lb-filter">
+      <button class="lb-ftab active" onclick="setLbTab(this)">Tuần này</button>
+      <button class="lb-ftab" onclick="setLbTab(this)">Tháng</button>
+      <button class="lb-ftab" onclick="setLbTab(this)">All-time</button>
+    </div>
+    <div class="lb-countdown">
+      <span style="font-size:13px;color:var(--t2)">Kết thúc trong</span>
+      <span style="font-size:15px;font-weight:800;color:var(--gold)" id="lb-countdown">2 ngày 14:23:08</span>
+    </div>
+    <div class="podium-wrap">
+      <div class="podium-reward" onclick="openRewards()">
+        <div class="podium-reward-line">🥇 Cúp + 500K · 🥈 300K · 🥉 300K</div>
+        <div class="podium-reward-link">Xem phần thưởng theo thứ hạng →</div>
+      </div>
+      <div class="podium">
+        <div class="pod-card second"><div class="pod-rank">#2</div><div class="pod-medal">🥈</div><div class="pod-name">Lan_T</div><div class="pod-pts">18,420★</div></div>
+        <div class="pod-card first"><div class="pod-rank">#1</div><div class="pod-medal">🥇</div><div class="pod-name">MinhAnh</div><div class="pod-pts">21,860★</div></div>
+        <div class="pod-card third"><div class="pod-rank">#3</div><div class="pod-medal">🥉</div><div class="pod-name">TungD</div><div class="pod-pts">16,200★</div></div>
+      </div>
+    </div>
+    <div class="my-rank">
+      <div style="text-align:center"><div class="my-rank-num">#142</div><div class="my-rank-chg">▲23</div></div>
+      <img src="assets/hub_bong_icon.png" class="my-rank-av">
+      <div style="flex:1"><div style="font-size:16px;font-weight:800;color:white">Bạn</div><div style="font-size:12px;color:var(--t2);margin-top:2px">12 ván · 8 trận đoán đúng</div></div>
+      <div style="font-size:20px;font-weight:900;color:var(--gold)">4,520★</div>
+    </div>
+    <div style="font-size:12px;font-weight:700;letter-spacing:1px;color:var(--t2);padding:4px 16px 10px">XẾP HẠNG GẦN BẠN</div>
+    <div class="lb-row"><div class="lb-rank">#140</div><div class="lb-av">P</div><div class="lb-name">PhongLe</div><div class="lb-chg" style="color:#4CAF50">▲5</div><div class="lb-pts">4,680★</div></div>
+    <div class="lb-row"><div class="lb-rank">#141</div><div class="lb-av">Q</div><div class="lb-name">QuocAnh</div><div class="lb-chg" style="color:var(--t2)">–</div><div class="lb-pts">4,610★</div></div>
+    <div class="lb-row"><div class="lb-rank">#143</div><div class="lb-av">N</div><div class="lb-name">NgocMai</div><div class="lb-chg" style="color:var(--red)">▼2</div><div class="lb-pts">4,490★</div></div>
+    <div class="lb-row" style="margin-bottom:20px"><div class="lb-rank">#144</div><div class="lb-av">D</div><div class="lb-name">DucThang</div><div class="lb-chg" style="color:#4CAF50">▲1</div><div class="lb-pts">4,420★</div></div>
+  </div>
+</div>
+
+<!-- TOP-UP -->
+<div class="screen" id="screen-nap">
+  <div class="back-header">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Nạp vé</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div style="margin:0 16px 16px;background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:14px 16px;display:flex;justify-content:space-between;align-items:center">
+      <div><div style="font-size:10px;color:var(--t2);font-weight:700;letter-spacing:0.5px;margin-bottom:4px">SỐ VÉ HIỆN TẠI</div><div style="font-size:20px;font-weight:900;color:white"><span data-ticket-balance>0</span> vé <img src="assets/Ve_du_doan.png" style="height:18px;vertical-align:middle"></div></div>
+      <div style="font-size:11px;color:var(--t2)">Đã nạp 4 lần</div>
+    </div>
+    <div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--t2);padding:0 16px 10px">CHỌN GÓI</div>
+    <div class="pkg-card" onclick="selectPkg(this)" data-tickets="5" data-bonus="0" data-price="25000"><div class="radio-circle"><div class="radio-dot-inner"></div></div><div><img src="assets/Ve_du_doan.png" style="height:28px;vertical-align:middle"></div><div class="pkg-info"><div class="pkg-tickets">5 vé</div></div><div class="pkg-price">25,000đ</div></div>
+    <div class="pkg-card selected" onclick="selectPkg(this)" data-tickets="20" data-bonus="2" data-price="100000"><div class="radio-circle"><div class="radio-dot-inner"></div></div><div><img src="assets/Ve_du_doan.png" style="height:28px;vertical-align:middle"></div><div class="pkg-info"><div class="pkg-tickets">20 vé</div><div class="pkg-bonus">+2 vé</div></div><div class="pkg-price">100,000đ</div></div>
+    <div class="pkg-card" onclick="selectPkg(this)" data-tickets="50" data-bonus="8" data-price="240000"><div class="radio-circle"><div class="radio-dot-inner"></div></div><div><img src="assets/Ve_du_doan.png" style="height:28px;vertical-align:middle"></div><div class="pkg-info"><div class="pkg-tickets">50 vé</div><div class="pkg-bonus">+8 vé · <span style="color:#4CAF50">TIẾT KIỆM 20%</span></div></div><div class="pkg-price">240,000đ</div></div>
+    <div class="pkg-card" onclick="selectPkg(this)" data-tickets="100" data-bonus="20" data-price="450000"><div class="radio-circle"><div class="radio-dot-inner"></div></div><div><img src="assets/Ve_du_doan.png" style="height:28px;vertical-align:middle"></div><div class="pkg-info"><div class="pkg-tickets">100 vé</div><div class="pkg-bonus">+20 vé · 🎭 Mascot skin</div></div><div class="pkg-price">450,000đ</div></div>
+    <div style="padding:14px 16px 10px"><div style="font-size:11px;font-weight:700;letter-spacing:0.6px;color:var(--t2);margin-bottom:10px">PHƯƠNG THỨC THANH TOÁN</div>
+    <div class="pay-methods">
+      <button class="pay-btn active" onclick="setPayMethod(this)">Viettel<br>Money</button>
+      <button class="pay-btn" onclick="setPayMethod(this)">Momo</button>
+      <button class="pay-btn" onclick="setPayMethod(this)">VNPay</button>
+      <button class="pay-btn" onclick="setPayMethod(this)">Thẻ</button>
+    </div></div>
+    <div class="topup-summary">
+      <div><div style="font-size:10px;color:var(--t2);font-weight:700;letter-spacing:0.5px;margin-bottom:2px">TỔNG THANH TOÁN</div><div style="font-size:18px;font-weight:900;color:var(--gold)" id="topup-total">100,000đ</div></div>
+      <div style="font-size:11px;color:var(--t2)" id="topup-breakdown">= 20 vé + 2 bonus</div>
+    </div>
+    <div style="padding:0 16px 24px"><button class="cta" id="topup-pay-btn" onclick="payTopup()">THANH TOÁN · 100,000đ</button></div>
+  </div>
+</div>
+
+<!-- PROFILE -->
+<div class="screen" id="screen-profile">
+  <div class="back-header center">
+    <button class="btn-back" onclick="goBack()">‹</button>
+    <h2>Cá nhân</h2>
+  </div>
+  <div style="flex:1;overflow-y:auto;padding-bottom:20px">
+    <div class="pf-hero">
+      <div class="pf-av">M</div>
+      <div class="pf-hero-info">
+        <div class="pf-name">Nguyễn Minh</div>
+        <div class="pf-title-pill">🔮 Nhà tiên tri · Hạng Vàng</div>
+        <div class="pf-pill-row">
+          <div class="pf-pill gold-p"><img src="assets/Ve_Minigame.png"><span data-minigame-balance>0</span></div>
+          <div class="pf-pill green-p">⭐ <span data-points-balance>0</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="pf-stats">
+      <div class="pf-stat"><div class="pf-stat-num">48</div><div class="pf-stat-lbl">Ván Suika</div></div>
+      <div class="pf-stat"><div class="pf-stat-num">132</div><div class="pf-stat-lbl">Trận dự đoán</div></div>
+      <div class="pf-stat"><div class="pf-stat-num">#12</div><div class="pf-stat-lbl">Hạng cao nhất</div></div>
+    </div>
+    <div class="pf-label">DANH HIỆU</div>
+    <div class="pf-badges">
+      <div class="pf-badge"><div class="pf-badge-ic">🏆</div><div class="pf-badge-lbl">Vô địch tuần</div></div>
+      <div class="pf-badge"><div class="pf-badge-ic">🔥</div><div class="pf-badge-lbl">Chuỗi 5</div></div>
+      <div class="pf-badge"><div class="pf-badge-ic">🎯</div><div class="pf-badge-lbl">Trúng đủ</div></div>
+      <div class="pf-badge"><div class="pf-badge-ic">⭐</div><div class="pf-badge-lbl">Top 100</div></div>
+    </div>
+    <div class="pf-label">LỊCH SỬ GẦN ĐÂY</div>
+    <div class="pf-hist"><div class="pf-hist-ic">⚽</div><div class="pf-hist-info"><div class="pf-hist-name">Dự đoán BRA 2-1 ARG</div><div class="pf-hist-time">Hôm nay · 14:30</div></div><div class="pf-hist-amt" style="color:#7BE0A2">+100</div></div>
+    <div class="pf-hist"><div class="pf-hist-ic">🎮</div><div class="pf-hist-info"><div class="pf-hist-name">Suika · ván #48</div><div class="pf-hist-time">Hôm qua</div></div><div class="pf-hist-amt" style="color:var(--gold)">+1,820</div></div>
+    <div class="pf-hist"><div class="pf-hist-ic">🎁</div><div class="pf-hist-info"><div class="pf-hist-name">Đổi Voucher Highlands</div><div class="pf-hist-time">2 ngày trước</div></div><div class="pf-hist-amt" style="color:#F06A6A">-1,200</div></div>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="screen-game" style="overflow:hidden">
+  <button onclick="goBack()" style="position:absolute;top:max(env(safe-area-inset-top),12px);left:max(env(safe-area-inset-left),12px);z-index:20;width:44px;height:44px;border-radius:50%;background:rgba(0,0,0,0.45);border:none;color:white;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center">‹</button>
+  <div id="suica-loader">
+    <div id="sl-stars"></div>
+    <div class="sl-status"><span>9:41</span><span>● ● ●&nbsp;&nbsp;⚡ 89%</span></div>
+    <div class="sl-core">
+      <div class="sl-hero"><div class="sl-ring"></div><img src="https://pub-397f2cca5d1b4679a1439589da6168c8.r2.dev/evo-11.png" alt=""/></div>
+      <div class="sl-eyebrow">WORLD CUP 2026</div>
+      <div class="sl-title">SUICASOCCA</div>
+      <div class="sl-sub">BÓNG ĐÁ MERGE</div>
+      <div id="sl-quota-badge" style="font-size:12px;font-weight:700;color:rgba(234,251,240,.85);background:rgba(110,255,178,.1);border:1px solid rgba(110,255,178,.25);border-radius:20px;padding:4px 16px;margin-top:-8px"></div>
+      <div class="sl-balls">
+        <img src="https://pub-397f2cca5d1b4679a1439589da6168c8.r2.dev/evo-01.png">
+        <img src="https://pub-397f2cca5d1b4679a1439589da6168c8.r2.dev/evo-02.png">
+        <img src="https://pub-397f2cca5d1b4679a1439589da6168c8.r2.dev/evo-03.png">
+        <img src="https://pub-397f2cca5d1b4679a1439589da6168c8.r2.dev/evo-04.png">
+        <img src="https://pub-397f2cca5d1b4679a1439589da6168c8.r2.dev/evo-05.png">
+      </div>
+      <div class="sl-bar"><div class="sl-fill" id="sl-fill"></div><div class="sl-knob" id="sl-knob"></div></div>
+      <div class="sl-pct">ĐANG TẢI… <b id="sl-pct">0%</b></div>
+      <div class="sl-steps">
+        <div class="sl-dot active" id="sl-dot-0"></div><div class="sl-dot" id="sl-dot-1"></div>
+        <div class="sl-dot" id="sl-dot-2"></div><div class="sl-dot" id="sl-dot-3"></div><div class="sl-dot" id="sl-dot-4"></div>
+      </div>
+      <div class="sl-step-label" id="sl-step-label">Khởi động hệ thống…</div>
+      <div class="sl-step-counter" id="sl-step-counter">BƯỚC 1 / 5</div>
+    </div>
+    <div class="sl-footer">Viettel Money · Đại Tiệc Dự Đoán World Cup 2026</div>
+  </div>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+</div>
+
+<!-- LIVE -->
+<div class="screen" id="screen-live">
+  <div class="back-header">
+    <div style="display:flex;align-items:center;gap:8px">
+      <span class="live-tag">LIVE</span>
+      <span style="font-size:16px;font-weight:800;color:white">BRA 2 – 1 ARG · 67'</span>
+    </div>
+  </div>
+  <div style="flex:1;overflow-y:auto">
+    <div style="margin:12px 16px;background:var(--card);border-radius:var(--r);border:1px solid var(--border);padding:20px">
+      <div id="live-timer" style="width:64px;height:64px;border-radius:50%;background:var(--red);color:white;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;margin:0 auto 14px;box-shadow:0 4px 16px rgba(232,64,64,0.4)">08</div>
+      <div style="font-size:16px;font-weight:700;text-align:center;color:white;margin-bottom:16px">Đội nào ghi bàn tiếp theo?</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <button onclick="selectAnswer(this)" style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:white;font-size:14px;font-weight:600">
+          <span>🇧🇷 Brazil</span><span style="color:var(--gold);font-weight:700">+15 điểm</span>
+        </button>
+        <button onclick="selectAnswer(this)" style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:white;font-size:14px;font-weight:600">
+          <span>🇦🇷 Argentina</span><span style="color:var(--gold);font-weight:700">+25 điểm</span>
+        </button>
+        <button onclick="selectAnswer(this)" style="background:rgba(255,255,255,0.06);border:1.5px solid rgba(255,255,255,0.15);border-radius:12px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;color:white;font-size:14px;font-weight:600">
+          <span>⚡ Không đội nào</span><span style="color:var(--gold);font-weight:700">+10 điểm</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- screens -->
+
+<nav class="bottom-nav" id="bottom-nav">
+  <button class="nav-item active" id="nav-0" onclick="goTab(0)"><span class="nav-icon"><img src="assets/hub_bottom_home.png"></span><span>Trang chủ</span></button>
+  <button class="nav-item" id="nav-1" onclick="goTab(1)"><span class="nav-icon"><img src="assets/hub_bottom_rank.png"></span><span>Xếp hạng</span></button>
+  <button class="nav-item" id="nav-2" onclick="goTab(2)"><span class="nav-icon"><img src="assets/hub_bottom_shop.png"></span><span>Shop</span></button>
+  <button class="nav-item" id="nav-3" onclick="goTab(3)"><span class="nav-icon"><img src="assets/hub_bottom_career.png"></span><span>Cá nhân</span></button>
+</nav>
+</div></div>
+
+<!-- POPUP -->
+<!-- CONFIRM PREDICT SHEET -->
+<!-- REWARD SEASON MODAL -->
+<div class="confirm-overlay" id="reward-overlay" onclick="closeRewards(event)">
+  <div class="rw-sheet">
+    <button class="rw-close" onclick="closeRewards()">✕</button>
+    <div class="rw-eyebrow">BẢNG XẾP HẠNG DỰ ĐOÁN</div>
+    <div class="rw-title">Phần thưởng Season</div>
+    <div class="rw-sub">Trao khi kết thúc Season (khoảng 1 tháng)</div>
+    <div class="rw-row"><div class="rw-medal gold-m">1</div><div class="rw-info"><div class="rw-rank">Hạng 1</div><div class="rw-prize" style="color:var(--gold)">PS5 Slim 512GB</div></div><div class="rw-img">🎮</div></div>
+    <div class="rw-row"><div class="rw-medal silver-m">2</div><div class="rw-info"><div class="rw-rank">Hạng 2</div><div class="rw-prize" style="color:#9DB8F5">Xiaomi Pad 6 8GB 256GB</div></div><div class="rw-img">📱</div></div>
+    <div class="rw-row"><div class="rw-medal bronze-m">3</div><div class="rw-info"><div class="rw-rank">Hạng 3</div><div class="rw-prize" style="color:#D89B66">Loa JBL Charge 5</div></div><div class="rw-img">🔊</div></div>
+    <div class="rw-row"><div class="rw-medal" style="background:none;font-size:26px">🎖️</div><div class="rw-info"><div class="rw-rank">Hạng 4 – 10</div><div class="rw-prize" style="color:white">Xiaomi Mi Band 10 Pro</div></div><div class="rw-img">⌚</div></div>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="confirm-overlay" onclick="closeConfirm(event)">
+  <div class="confirm-sheet" onclick="event.stopPropagation()">
+    <div class="confirm-title">Xác nhận dự đoán</div>
+    <div class="confirm-score-row">
+      <div style="font-size:17px;font-weight:800;color:white;text-align:center;width:100%" id="cf-outcome-label">–</div>
+    </div>
+    <div class="confirm-match-label" id="cf-match-label">Brazil vs Argentina</div>
+    <div class="confirm-rows">
+      <div class="confirm-row" id="cf-conf-row">
+        <span class="confirm-row-label">Sự tự tin</span>
+        <span class="confirm-row-val gold" id="cf-conf-val">×2 (ĐẶT)</span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-row-label">Chi phí</span>
+        <span class="confirm-row-val" id="cf-cost">1 vé dự đoán <img src="assets/Ve_du_doan.png" style="height:15px;vertical-align:middle"></span>
+      </div>
+      <div class="confirm-row">
+        <span class="confirm-row-label">Điểm nếu trúng</span>
+        <span class="confirm-row-val accent" id="cf-pts">+100 điểm</span>
+      </div>
+    </div>
+    <button class="confirm-cta" onclick="submitPredict()">XÁC NHẬN ĐẶT</button>
+    <button class="confirm-cancel" onclick="closeConfirm()">Huỷ</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="success-overlay">
+  <div class="ps-sheet" onclick="event.stopPropagation()">
+    <div class="ps-check">✓</div>
+    <div class="ps-title">Đặt dự đoán thành công!</div>
+    <div class="ps-sub">Chúc bạn may mắn trúng tỉ số <img src="assets/Ve_may_man.png" style="height:16px;vertical-align:middle"></div>
+    <div class="ps-card">
+      <div class="ps-card-score" id="ps-score">🇧🇷 2 - 1 🇦🇷</div>
+      <div class="ps-card-tickets" id="ps-tickets">Vé dự đoán còn lại: 7 <img src="assets/Ve_du_doan.png" style="height:14px;vertical-align:middle"></div>
+    </div>
+    <button class="ps-cta" onclick="closeSuccess();filterMatches('upcoming');goScreen('screen-matches')">XEM TRẬN KHÁC</button>
+    <button class="ps-secondary" onclick="closeSuccess();goTab(0)">Về trang chủ</button>
+  </div>
+</div>
+
+<div class="confirm-overlay" id="notickets-overlay" onclick="closeNoTickets(event)">
+  <div class="nt-sheet" onclick="event.stopPropagation()">
+    <div class="nt-icon"><img src="assets/Ve_may_man.png" style="height:38px;vertical-align:middle"></div>
+    <div class="nt-title">Hết vé dự đoán</div>
+    <div class="nt-sub">Mua thêm vé để đặt kèo trận này</div>
+    <div class="nt-card">
+      <div>
+        <div class="nt-card-name"><span id="nt-qty">1</span> vé dự đoán</div>
+        <div class="nt-card-note">≈ Kip Lào · trừ vào ví Viettel Money</div>
+      </div>
+      <div class="nt-card-price"><span id="nt-price">500</span> ₭</div>
+    </div>
+    <div class="nt-balance">Số dư vé dự đoán hiện tại: <span data-ticket-balance>0</span> <img src="assets/Ve_du_doan.png" style="height:14px;vertical-align:middle"></div>
+    <button class="nt-cta" onclick="closeNoTickets();goTab(2)">MUA VÉ · <span id="nt-cta-price">500</span> ₭</button>
+    <button class="nt-secondary" onclick="closeNoTickets()">Để sau</button>
+  </div>
+</div>
+
+<!-- SPIN RESULT OVERLAY -->
+<div class="confirm-overlay" id="spin-result-overlay">
+  <div class="confirm-sheet" onclick="event.stopPropagation()" style="text-align:center;padding:28px 24px 20px;max-width:320px;width:100%;position:relative;overflow:hidden">
+    <div id="spin-confetti" style="position:absolute;inset:0;pointer-events:none;font-size:18px;overflow:hidden"></div>
+    <div id="spin-result-title" style="font-size:15px;font-weight:700;color:var(--gold);letter-spacing:0.5px;margin-bottom:4px">🎉 CHÚC MỪNG 🎉</div>
+    <div id="spin-result-subtitle" style="font-size:13px;color:var(--t2);margin-bottom:20px">Bạn đã trúng</div>
+    <div id="spin-prize-icon" style="width:90px;height:90px;border-radius:50%;background:var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;box-shadow:0 0 24px rgba(245,200,66,0.4)">
+      <div id="spin-prize-value" style="font-size:28px;font-weight:900;color:#1a3a24;line-height:1">100</div>
+      <div id="spin-prize-unit" style="font-size:10px;font-weight:800;color:#1a3a24;letter-spacing:0.5px">ĐIỂM</div>
+    </div>
+    <div id="spin-result-added" style="font-size:13px;color:var(--t2);margin-bottom:6px">Đã cộng vào ví điểm của bạn</div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:24px">Vé may mắn còn lại: <span data-lucky-balance style="color:white;font-weight:700">0</span> <img src="assets/Ve_may_man.png" style="height:14px;vertical-align:middle"></div>
+    <button id="spin-claim-btn" style="width:100%;padding:14px;background:#9B59B6;border:none;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:800;color:white;cursor:pointer;margin-bottom:10px;display:none">📦 Điền thông tin nhận quà</button>
+    <button onclick="spinAgain()" id="spin-again-btn" style="width:100%;padding:14px;background:var(--gold);border:none;border-radius:12px;font-family:var(--font);font-size:15px;font-weight:800;color:#1a3a24;cursor:pointer;margin-bottom:10px">QUAY TIẾP · 1 <img src="assets/Ve_may_man.png" style="height:18px;vertical-align:middle"></button>
+    <button onclick="closeSpinResult()" style="width:100%;padding:12px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:12px;font-family:var(--font);font-size:15px;font-weight:600;color:white;cursor:pointer">Đóng</button>
+  </div>
+</div>
+
+<!-- CLAIM FORM OVERLAY -->
+<div class="confirm-overlay" id="claim-overlay" onclick="closeClaimForm(event)">
+  <div class="confirm-sheet" onclick="event.stopPropagation()" style="max-width:340px;width:100%">
+    <div class="confirm-title">📦 Điền thông tin nhận quà</div>
+    <div id="claim-prize-name" style="font-size:13px;color:var(--t2);text-align:center;margin-bottom:16px">Quà vật lý</div>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+      <input id="claim-fullname" type="text" placeholder="Họ và tên *" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 14px;color:white;font-family:var(--font);font-size:14px;outline:none;width:100%">
+      <input id="claim-phone" type="tel" placeholder="Số điện thoại *" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 14px;color:white;font-family:var(--font);font-size:14px;outline:none;width:100%">
+      <input id="claim-address" type="text" placeholder="Địa chỉ giao hàng *" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 14px;color:white;font-family:var(--font);font-size:14px;outline:none;width:100%">
+      <input id="claim-note" type="text" placeholder="Ghi chú (không bắt buộc)" style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.15);border-radius:10px;padding:12px 14px;color:white;font-family:var(--font);font-size:14px;outline:none;width:100%">
+    </div>
+    <button class="confirm-cta" id="claim-submit-btn" onclick="submitClaim()">GỬI THÔNG TIN</button>
+    <button class="confirm-cancel" onclick="closeClaimForm()">Để sau</button>
+  </div>
+</div>
+
+<div class="popup-overlay" id="popup-overlay" onclick="closePopup(event)">
+  <div class="popup-sheet" onclick="event.stopPropagation()">
+    <div class="popup-icon error" id="popup-icon">⚠️</div>
+    <div class="popup-title" id="popup-title">Có lỗi xảy ra</div>
+    <div class="popup-msg" id="popup-msg">Vui lòng thử lại sau.</div>
+    <button class="popup-btn" id="popup-btn-primary" onclick="closePopup()">Đã hiểu</button>
+    <button class="popup-btn secondary" id="popup-btn-secondary" style="display:none" onclick="closePopup()">Đóng</button>
+  </div>
+</div>
+
+<script src="js/app.js"></script>
+</body>
 </html>
