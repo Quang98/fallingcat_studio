@@ -10,5 +10,10 @@
     "name": "Game Verse",
     "category": "Puzzle",
     "thumbnail": "logothumbnail/Logo_ArcaneHunter.png"
+  },
+  {
+    "id": "arcanehunterfps",
+    "name": "Arcane Hunter FPS",
+    "category": "Hành động"
   }
 ]

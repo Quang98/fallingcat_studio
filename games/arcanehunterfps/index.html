@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes">
+  <title>Arcane Hunter FPS</title>
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #231F20;
+    }
+    #unity-canvas {
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      width: auto;
+      height: 100%;
+      aspect-ratio: 960 / 600;
+      max-width: 100%;
+      background: #231F20;
+      display: block;
+    }
+    #game-loading {
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      background: #0a0a0f;
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      transition: opacity 0.4s ease;
+    }
+    #game-loading.hide { opacity: 0; pointer-events: none; }
+    .loading-title {
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      background: linear-gradient(135deg, #f5a623, #e8432d);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    .loading-bar {
+      width: min(280px, 75vw);
+      height: 5px;
+      overflow: hidden;
+      border-radius: 3px;
+      background: #1e1e2e;
+    }
+    #loading-fill {
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #e8432d, #f5a623);
+      transition: width 0.2s ease;
+    }
+    #loading-label { color: #888; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <canvas id="unity-canvas" tabindex="-1"></canvas>
+  <div id="game-loading">
+    <div class="loading-title">Arcane Hunter FPS</div>
+    <div class="loading-bar"><div id="loading-fill"></div></div>
+    <div id="loading-label">0%</div>
+  </div>
+
+  <script src="https://game-asset-proxy.daoquang-nvm.workers.dev/ArcaneHunterFPS/Build/ArcaneHunterFPS.loader.js?v=1.0.7"></script>
+  <script>
+    const canvas = document.querySelector('#unity-canvas');
+    const loading = document.querySelector('#game-loading');
+    const loadingFill = document.querySelector('#loading-fill');
+    const loadingLabel = document.querySelector('#loading-label');
+
+    createUnityInstance(canvas, {
+      arguments: [],
+      dataUrl: 'https://game-asset-proxy.daoquang-nvm.workers.dev/ArcaneHunterFPS/Build/ArcaneHunterFPS.data.unityweb?v=1.0.7',
+      frameworkUrl: 'https://game-asset-proxy.daoquang-nvm.workers.dev/ArcaneHunterFPS/Build/ArcaneHunterFPS.framework.js.unityweb?v=1.0.7',
+      codeUrl: 'https://game-asset-proxy.daoquang-nvm.workers.dev/ArcaneHunterFPS/Build/ArcaneHunterFPS.wasm.unityweb?v=1.0.7',
+      streamingAssetsUrl: 'https://game-asset-proxy.daoquang-nvm.workers.dev/ArcaneHunterFPS/StreamingAssets',
+      companyName: 'DefaultCompany',
+      productName: 'ArcaneFPS',
+      productVersion: '1.0.7',
+      devicePixelRatio: 1,
+    }, function (progress) {
+      const percent = Math.round(progress * 100);
+      loadingFill.style.width = percent + '%';
+      loadingLabel.textContent = percent + '%';
+    }).then(function () {
+      loading.classList.add('hide');
+      setTimeout(function () { loading.remove(); }, 400);
+    }).catch(function (error) {
+      loadingLabel.textContent = 'Không thể tải game';
+      console.error(error);
+    });
+  </script>
+</body>
+</html>
