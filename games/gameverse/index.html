@@ -110,7 +110,7 @@
     function setProgress(pct,label,sizeText){_pct=Math.max(_pct,Math.min(100,pct));fillEl.style.width=_pct+'%';pctEl.textContent=Math.round(_pct)+'%';if(label!==undefined)stageEl.textContent=label;if(sizeText!==undefined)sizeEl.textContent=sizeText;}
     function setStep(which){[stepDl,stepCo,stepIn].forEach((s,i,arr)=>{s.classList.remove('done','active');if(i<arr.indexOf(which))s.classList.add('done');if(s===which)s.classList.add('active');});}
     function fmtMB(b){return(b/1048576).toFixed(1)+' MB';}
-    const ASSET_VERSION="1.3.1";
+    const ASSET_VERSION="1.3.2";
     const CDN_BASE="https://game-asset-proxy.daoquang-nvm.workers.dev";
     const CACHE_PREFIX="gameverse-assets-";
     const CACHE_NAME=CACHE_PREFIX+ASSET_VERSION;
