@@ -34,27 +34,6 @@
     "thumbnail": "logothumbnail/Logo_MyTinyShop.png"
   },
   {
-    "id": "com.itcgamestudio.doom.strider",
-    "name": "Doom Strider",
-    "link_android": "",
-    "link_ios": "https://apps.apple.com/vn/app/doomstrider-battlebag-heroes/id6740755923",
-    "thumbnail": "logothumbnail/Logo_DoomStrider.png"
-  },
-  {
-    "id": "com.itcgamestudio.dango.sort.color.match.puzzle",
-    "name": "Dango Sort - Color Match Puzzle",
-    "link_android": "",
-    "link_ios": "https://apps.apple.com/vn/app/dango-sort-color-puzzle-game/id6615064806",
-    "thumbnail": "logothumbnail/Logo_DangoSort.png"
-  },
-  {
-    "id": "com.itcgamestudio.zombie.hunt.3d.run.shooting",
-    "name": "Zombie Hunt 3D: Run & Shooting",
-    "link_android": "",
-    "link_ios": "https://apps.apple.com/vn/app/zombie-hunt-3d-run-shooting/id6479971957",
-    "thumbnail": "logothumbnail/Logo_ZombieHunt.png"
-  },
-  {
     "id": "com.itcgamestudio.space.astro.cat.brick.breaker",
     "name": "Space Astro Cat: Brick Breaker",
     "link_android": "",
