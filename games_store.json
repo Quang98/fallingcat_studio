@@ -13,11 +13,11 @@
     "thumbnail": "logothumbnail/Logo_VampireHunter.png"
   },
   {
-    "id": "com.itcgamestudio.roomdecor.simulation",
-    "name": "My Tiny Shop: Relaxing Decor",
-    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.roomdecor.simulation",
-    "link_ios": "https://apps.apple.com/vn/app/my-tiny-shop-relaxing-decor/id6755370982",
-    "thumbnail": "logothumbnail/Logo_MyTinyShop.png"
+    "id": "com.itcgamestudio.backpack.apocalypse",
+    "name": "Backpack Apocalypse",
+    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.backpackapocalypse.merge.war.battle.brawl",
+    "link_ios": "",
+    "thumbnail": "logothumbnail/Logo_BackpackApocalypse.jpg"
   },
   {
     "id": "com.itcgamestudio.chocobento.puzzle",
@@ -27,11 +27,11 @@
     "thumbnail": "logothumbnail/Logo_ChocoBento.png"
   },
   {
-    "id": "com.itcgamestudio.backpack.apocalypse",
-    "name": "Backpack Apocalypse",
-    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.backpackapocalypse.merge.war.battle.brawl",
-    "link_ios": "",
-    "thumbnail": "logothumbnail/Logo_BackpackApocalypse.jpg"
+    "id": "com.itcgamestudio.roomdecor.simulation",
+    "name": "My Tiny Shop: Relaxing Decor",
+    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.roomdecor.simulation",
+    "link_ios": "https://apps.apple.com/vn/app/my-tiny-shop-relaxing-decor/id6755370982",
+    "thumbnail": "logothumbnail/Logo_MyTinyShop.png"
   },
   {
     "id": "com.itcgamestudio.doom.strider",
