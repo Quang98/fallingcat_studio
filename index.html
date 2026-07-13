@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QuangDM — Game Developer Portfolio</title>
   <meta name="description"
-    content="Portfolio của QuangDM — các dự án game đã phát hành trên Android, iOS và Playable Ads tương tác.">
+    content="Portfolio của QuangDM — các dự án game mobile, Game HTML5 và Playable Ads tương tác.">
   <link
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
@@ -530,6 +530,98 @@
       color: #fff;
     }
 
+    /* HTML5 GAMES */
+    .html5-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 18px;
+    }
+
+    .html5-card {
+      position: relative;
+      min-height: 165px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background:
+        radial-gradient(circle at 100% 0, rgba(255, 106, 0, 0.12), transparent 42%),
+        var(--card);
+      color: var(--text);
+      text-decoration: none;
+      transition: transform .25s, box-shadow .25s, border-color .25s;
+    }
+
+    .html5-card::before {
+      content: 'HTML5';
+      position: absolute;
+      right: 16px;
+      bottom: 10px;
+      color: rgba(255, 255, 255, 0.025);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 54px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      pointer-events: none;
+    }
+
+    .html5-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(255, 106, 0, 0.25);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    }
+
+    .html5-card .play-icon {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 106, 0, 0.25);
+      background: rgba(255, 106, 0, 0.08);
+      color: var(--orange2);
+      font-size: 13px;
+      transition: color .25s, background .25s, transform .25s;
+    }
+
+    .html5-card:hover .play-icon {
+      background: var(--orange);
+      color: #080910;
+      transform: scale(1.06);
+    }
+
+    .html5-card-body {
+      position: relative;
+      z-index: 1;
+      padding: 24px 68px 24px 22px;
+    }
+
+    .html5-card .category {
+      margin-bottom: 8px;
+      color: var(--orange);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+
+    .html5-card h3 {
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .html5-card .play-label {
+      color: rgba(255, 255, 255, 0.45);
+      font-size: 12px;
+      transition: color .2s;
+    }
+
+    .html5-card:hover .play-label {
+      color: var(--orange2);
+    }
+
     /* PLAYABLE ADS */
     .playable-card {
       display: grid;
@@ -732,6 +824,7 @@
     <nav>
       <a href="#about" class="active">Giới thiệu</a>
       <a href="#projects">Dự án</a>
+      <a href="#html5-games">Game HTML5</a>
       <a href="#playables">Playable Ads</a>
     </nav>
     <div style="width:120px"></div>
@@ -793,6 +886,18 @@
       <div class="store-grid reveal-children" id="storeGrid"></div>
     </section>
 
+    <section class="section" id="html5-games">
+      <div class="section-header reveal">
+        <div>
+          <div class="section-label">Chơi Trên Trình Duyệt</div>
+          <div class="section-title">Game HTML5</div>
+        </div>
+        <span class="section-count" id="html5-count"></span>
+      </div>
+      <div class="divider"></div>
+      <div class="html5-grid reveal-children" id="html5Grid"></div>
+    </section>
+
     <section class="section" id="playables">
       <div class="section-header reveal">
         <div>
@@ -849,12 +954,18 @@
 
     async function loadGames() {
       try {
-        const response = await fetch('games_store.json');
-        const raw = await response.json();
+        const [storeResponse, html5Response] = await Promise.all([
+          fetch('games_store.json'),
+          fetch('games.json')
+        ]);
+        const raw = await storeResponse.json();
+        const html5Games = await html5Response.json();
         const seen = new Set();
         allStore = raw.filter(g => { if (seen.has(g.id)) return false; seen.add(g.id); return true; });
         document.getElementById('store-count').textContent = allStore.length + ' sản phẩm';
+        document.getElementById('html5-count').textContent = html5Games.length + ' game';
         renderStore('android');
+        renderHtml5Games(html5Games);
       } catch (e) { console.error(e); }
     }
 
@@ -883,6 +994,28 @@
         el.appendChild(d);
       });
       requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
+    }
+
+    function renderHtml5Games(games) {
+      const el = document.getElementById('html5Grid');
+      if (!games.length) {
+        el.innerHTML = '<div class="empty">Chưa có Game HTML5.</div>';
+        return;
+      }
+
+      games.forEach(g => {
+        const card = document.createElement('a');
+        card.className = 'html5-card';
+        card.href = 'play.html?id=' + encodeURIComponent(g.id);
+        card.innerHTML = `
+          <div class="play-icon">▶</div>
+          <div class="html5-card-body">
+            <div class="category">${g.category || 'Game HTML5'}</div>
+            <h3>${g.name}</h3>
+            <div class="play-label">Chơi ngay trên trình duyệt →</div>
+          </div>`;
+        el.appendChild(card);
+      });
     }
 
     function switchTab(platform, btn) {
