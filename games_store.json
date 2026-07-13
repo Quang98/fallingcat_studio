@@ -34,13 +34,6 @@
     "thumbnail": "logothumbnail/Logo_BackpackApocalypse.jpg"
   },
   {
-    "id": "com.itcgamestudio.windy.memories",
-    "name": "Windy Memories",
-    "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.windymemories.endlessrun",
-    "link_ios": "",
-    "thumbnail": "logothumbnail/Logo_WindyMemories.png"
-  },
-  {
     "id": "com.itcgamestudio.doom.strider",
     "name": "Doom Strider",
     "link_android": "",

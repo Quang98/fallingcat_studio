@@ -38,12 +38,6 @@ games = [
         "filename": "Logo_BackpackApocalypse.png"
     },
     {
-        "name": "Windy Memories",
-        "link_ios": "",
-        "link_android": "https://play.google.com/store/apps/details?id=com.itcgamestudio.windy.memories",
-        "filename": "Logo_WindyMemories.png"
-    },
-    {
         "name": "Doom Strider",
         "link_ios": "https://apps.apple.com/vn/app/doomstrider-battlebag-heroes/id6740755923",
         "link_android": "",

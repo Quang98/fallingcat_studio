@@ -4,7 +4,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ITC Games Studio</title>
+  <title>QuangDM — Game Developer Portfolio</title>
+  <meta name="description"
+    content="Portfolio của QuangDM — tuyển tập các dự án game đã phát hành trên Android và iOS.">
   <link
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap"
     rel="stylesheet">
@@ -261,6 +263,50 @@
       flex-wrap: wrap;
     }
 
+    .about-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .about-card {
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: linear-gradient(145deg, rgba(255, 106, 0, 0.08), rgba(17, 20, 34, 0.8));
+    }
+
+    .about-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--orange2);
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 24px;
+      letter-spacing: 1px;
+    }
+
+    .about-card p {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        height: auto;
+        min-height: 320px;
+        padding: 36px 24px;
+      }
+
+      .hero p br {
+        display: none;
+      }
+
+      .about-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
     .btn-store {
       display: inline-flex;
       align-items: center;
@@ -484,125 +530,6 @@
       color: #fff;
     }
 
-    /* GAME CARDS */
-    .game-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 20px;
-    }
-
-    .game-card {
-      background: var(--card);
-      border-radius: 16px;
-      overflow: hidden;
-      cursor: pointer;
-      transition: transform .25s, box-shadow .25s;
-      border: 1px solid var(--border);
-      position: relative;
-    }
-
-    .game-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 106, 0, 0.15);
-    }
-
-    /* glare sweep */
-    .game-card::after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -75%;
-      width: 50%;
-      height: 200%;
-      background: linear-gradient(105deg, transparent 40%, rgba(255, 255, 255, 0.06) 50%, transparent 60%);
-      transform: skewX(-15deg);
-      transition: left .5s ease;
-      pointer-events: none;
-    }
-
-    .game-card:hover::after {
-      left: 125%;
-    }
-
-    .game-card .thumb {
-      width: 100%;
-      height: 148px;
-      object-fit: cover;
-      display: block;
-      background: #0a0c14;
-    }
-
-    .game-category {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: linear-gradient(135deg, var(--orange), var(--orange2));
-      color: #000;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-
-    .game-card-body {
-      padding: 16px;
-    }
-
-    .game-card h3 {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-
-    .game-card .desc {
-      font-size: 12px;
-      color: var(--muted);
-      margin-bottom: 10px;
-      line-height: 1.5;
-    }
-
-    .stars {
-      color: #f59e0b;
-      font-size: 13px;
-    }
-
-    .play-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity .25s;
-      border-radius: 16px;
-    }
-
-    .play-btn {
-      width: 52px;
-      height: 52px;
-      border-radius: 50%;
-      background: var(--orange);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #000;
-      font-size: 20px;
-      box-shadow: 0 0 30px rgba(255, 106, 0, 0.6);
-      transform: scale(0.8);
-      transition: transform .2s;
-    }
-
-    .game-card:hover .play-overlay {
-      opacity: 1;
-    }
-
-    .game-card:hover .play-btn {
-      transform: scale(1);
-    }
-
     /* FOOTER */
     footer {
       position: relative;
@@ -716,11 +643,10 @@
   <canvas id="stars"></canvas>
 
   <header class="navbar">
-    <div class="logo">ITC<span> Games</span></div>
+    <div class="logo">QUANG<span>DM</span></div>
     <nav>
-      <a href="#" class="active">Trang chủ</a>
-      <a href="#store">Phát hành</a>
-      <a href="#demo">Demo</a>
+      <a href="#about" class="active">Giới thiệu</a>
+      <a href="#projects">Dự án</a>
     </nav>
     <div style="width:120px"></div>
   </header>
@@ -731,24 +657,45 @@
       <div class="hero-bg"></div>
       <div class="hero-grid"></div>
       <div class="hero-content">
-        <div class="hero-eyebrow">ITC Game Studio</div>
-        <h1>ARCANE<br><span>HUNTER</span></h1>
-        <p>Soul Survivor — Action RPG sinh tồn đỉnh cao.<br>Chiến đấu, tiến hóa, chinh phục.</p>
+        <div class="hero-eyebrow">Game Developer Portfolio</div>
+        <h1>QUANG<span>DM</span></h1>
+        <p>Tôi tạo ra những trải nghiệm game chỉn chu và đưa chúng đến với người chơi<br>trên Android và iOS.</p>
         <div class="hero-btns">
-          <a class="btn-store btn-android"
-            href="https://play.google.com/store/apps/details?id=com.itcgamestudio.arcane.hunter.soul.survivor.monster.action.shooter.rpg"
-            target="_blank">▶ Google Play</a>
-          <a class="btn-store btn-ios" href="https://apps.apple.com/vn/app/arcane-hunter-soul-survivor/id6740374474"
-            target="_blank"> App Store</a>
+          <a class="btn-store btn-android" href="#projects">Xem dự án</a>
+          <a class="btn-store btn-ios" href="#about">Về tôi</a>
         </div>
       </div>
     </div>
 
-    <section class="section" id="store">
+    <section class="section" id="about">
       <div class="section-header reveal">
         <div>
-          <div class="section-label">Sản phẩm</div>
-          <div class="section-title">Đã Phát Hành</div>
+          <div class="section-label">Về tôi</div>
+          <div class="section-title">Từ Ý Tưởng Đến Người Chơi</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="about-grid reveal-children">
+        <article class="about-card">
+          <strong>GAME DEVELOPMENT</strong>
+          <p>Phát triển trải nghiệm game với trọng tâm là gameplay rõ ràng, cảm giác điều khiển tốt và khả năng hoàn thiện sản phẩm.</p>
+        </article>
+        <article class="about-card">
+          <strong>MOBILE</strong>
+          <p>Xây dựng và phát hành sản phẩm cho thiết bị di động, hướng đến trải nghiệm mượt mà trên Android và iOS.</p>
+        </article>
+        <article class="about-card">
+          <strong>PRODUCT</strong>
+          <p>Theo sát vòng đời dự án từ ý tưởng, phát triển, thử nghiệm cho đến khi sản phẩm đến tay người chơi.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="projects">
+      <div class="section-header reveal">
+        <div>
+          <div class="section-label">Portfolio</div>
+          <div class="section-title">Dự Án Đã Phát Hành</div>
         </div>
         <span class="section-count" id="store-count"></span>
       </div>
@@ -760,23 +707,11 @@
       <div class="store-grid reveal-children" id="storeGrid"></div>
     </section>
 
-    <section class="section" id="demo">
-      <div class="section-header reveal">
-        <div>
-          <div class="section-label">Web Demo</div>
-          <div class="section-title">Chơi Thử Ngay</div>
-        </div>
-        <span class="section-count" id="demo-count"></span>
-      </div>
-      <div class="divider"></div>
-      <div class="game-grid reveal-children" id="gameGrid"></div>
-    </section>
-
   </div>
 
   <footer>
-    <div class="footer-logo">ITC Games</div>
-    <div class="footer-copy">© 2025 ITC Game Studio · All rights reserved.</div>
+    <div class="footer-logo">QUANGDM</div>
+    <div class="footer-copy">© 2026 QuangDM · Game Developer Portfolio</div>
   </footer>
 
   <script>
@@ -800,19 +735,16 @@
     document.querySelectorAll('.reveal,.reveal-children').forEach(el => obs.observe(el));
 
     /* Data */
-    let allStore = [], currentPlatform = 'android';
+    let allStore = [];
 
     async function loadGames() {
       try {
-        const [sr, gr] = await Promise.all([fetch('games_store.json'), fetch('games.json')]);
-        const raw = await sr.json();
-        const games = await gr.json();
+        const response = await fetch('games_store.json');
+        const raw = await response.json();
         const seen = new Set();
         allStore = raw.filter(g => { if (seen.has(g.id)) return false; seen.add(g.id); return true; });
         document.getElementById('store-count').textContent = allStore.length + ' sản phẩm';
-        document.getElementById('demo-count').textContent = games.length + ' game';
         renderStore('android');
-        renderDemos(games);
       } catch (e) { console.error(e); }
     }
 
@@ -825,13 +757,12 @@
       );
       if (!list.length) { el.innerHTML = '<div class="empty">Chưa có sản phẩm trên nền tảng này.</div>'; return; }
       list.forEach(g => {
-        const link = platform === 'android' ? g.link_android : g.link_ios;
         const d = document.createElement('div');
         d.className = 'store-card';
         d.innerHTML = `
           <img class="thumb" src="${g.thumbnail || ''}" alt="${g.name || ''}">
           <div class="store-card-body">
-            <div class="tag">🎮 ITC Studio</div>
+            <div class="tag">🎮 QuangDM</div>
             <h3>${g.name}</h3>
             <div class="store-links">
               ${platform === 'android'
@@ -842,27 +773,6 @@
         el.appendChild(d);
       });
       requestAnimationFrame(() => requestAnimationFrame(() => el.classList.add('visible')));
-    }
-
-    function renderDemos(list) {
-      const el = document.getElementById('gameGrid');
-      el.innerHTML = '';
-      if (!list.length) { el.innerHTML = '<div class="empty">Chưa có demo.</div>'; return; }
-      list.forEach(g => {
-        const d = document.createElement('div');
-        d.className = 'game-card';
-        d.onclick = () => { window.location.href = 'play.html?id=' + g.id; };
-        d.innerHTML = `
-          <img class="thumb" src="${g.thumbnail || ''}" alt="${g.name || ''}">
-          <div class="game-category">${g.category || 'Game'}</div>
-          <div class="play-overlay"><div class="play-btn">▶</div></div>
-          <div class="game-card-body">
-            <h3>${g.name}</h3>
-            <div class="desc">${g.description || 'Nhấn để chơi demo trực tiếp trên trình duyệt.'}</div>
-            <div class="stars">${'⭐'.repeat(Math.floor(g.rating || 4.5))} <span style="color:var(--muted);font-size:12px;">${g.rating || 4.5}</span></div>
-          </div>`;
-        el.appendChild(d);
-      });
     }
 
     function switchTab(platform, btn) {
