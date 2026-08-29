@@ -1061,6 +1061,7 @@
     }
 
     .playable-frame {
+      position: relative;
       width: 320px;
       height: 480px;
       justify-self: center;
@@ -1076,6 +1077,52 @@
       height: 100%;
       border: 0;
       background: #000;
+    }
+
+    .playable-poster {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      cursor: pointer;
+      background:
+        radial-gradient(circle at 50% 40%, rgba(255, 106, 0, 0.16), transparent 60%),
+        #0c0d14;
+      transition: background .25s;
+    }
+
+    .playable-frame.playing .playable-poster {
+      display: none;
+    }
+
+    .playable-poster .play-icon {
+      display: grid;
+      width: 64px;
+      height: 64px;
+      place-items: center;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 106, 0, 0.3);
+      background: rgba(255, 106, 0, 0.1);
+      color: var(--orange2);
+      font-size: 22px;
+      transition: color .25s, background .25s, transform .25s;
+    }
+
+    .playable-poster:hover .play-icon {
+      background: var(--orange);
+      color: #080910;
+      transform: scale(1.08);
+    }
+
+    .playable-poster span {
+      color: rgba(255, 255, 255, 0.55);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: .5px;
+      text-transform: uppercase;
     }
 
     @media (max-width: 820px) {
@@ -1467,9 +1514,11 @@
           <a class="btn-store btn-android" href="playables/arcane-hunter/index.html" target="_blank"
             rel="noopener">Chơi toàn màn hình ↗</a>
         </div>
-        <div class="playable-frame">
-          <iframe src="playables/arcane-hunter/index.html" title="Arcane Hunter playable ad" loading="lazy"
-            allow="autoplay; fullscreen"></iframe>
+        <div class="playable-frame" data-src="playables/arcane-hunter/index.html" data-title="Arcane Hunter playable ad">
+          <div class="playable-poster">
+            <div class="play-icon">▶</div>
+            <span>Nhấn để trải nghiệm</span>
+          </div>
         </div>
       </article>
       <article class="playable-card reveal">
@@ -1480,9 +1529,11 @@
           <a class="btn-store btn-android" href="playables/match3/index.html" target="_blank"
             rel="noopener">Chơi toàn màn hình ↗</a>
         </div>
-        <div class="playable-frame">
-          <iframe src="playables/match3/index.html" title="Match3 playable ad" loading="lazy"
-            allow="autoplay; fullscreen"></iframe>
+        <div class="playable-frame" data-src="playables/match3/index.html" data-title="Match3 playable ad">
+          <div class="playable-poster">
+            <div class="play-icon">▶</div>
+            <span>Nhấn để trải nghiệm</span>
+          </div>
         </div>
       </article>
       <article class="playable-card reveal">
@@ -1493,9 +1544,11 @@
           <a class="btn-store btn-android" href="playables/bubbleshooter/index.html" target="_blank"
             rel="noopener">Chơi toàn màn hình ↗</a>
         </div>
-        <div class="playable-frame">
-          <iframe src="playables/bubbleshooter/index.html" title="Bubble Shooter playable ad" loading="lazy"
-            allow="autoplay; fullscreen"></iframe>
+        <div class="playable-frame" data-src="playables/bubbleshooter/index.html" data-title="Bubble Shooter playable ad">
+          <div class="playable-poster">
+            <div class="play-icon">▶</div>
+            <span>Nhấn để trải nghiệm</span>
+          </div>
         </div>
       </article>
       <article class="playable-card reveal">
@@ -1506,9 +1559,11 @@
           <a class="btn-store btn-android" href="playables/petshop/index.html" target="_blank"
             rel="noopener">Chơi toàn màn hình ↗</a>
         </div>
-        <div class="playable-frame">
-          <iframe src="playables/petshop/index.html" title="Pet Shop playable ad" loading="lazy"
-            allow="autoplay; fullscreen"></iframe>
+        <div class="playable-frame" data-src="playables/petshop/index.html" data-title="Pet Shop playable ad">
+          <div class="playable-poster">
+            <div class="play-icon">▶</div>
+            <span>Nhấn để trải nghiệm</span>
+          </div>
         </div>
       </article>
       <article class="playable-card reveal">
@@ -1519,9 +1574,11 @@
           <a class="btn-store btn-android" href="playables/petshop2/index.html" target="_blank"
             rel="noopener">Chơi toàn màn hình ↗</a>
         </div>
-        <div class="playable-frame">
-          <iframe src="playables/petshop2/index.html" title="Pet Shop 2 playable ad" loading="lazy"
-            allow="autoplay; fullscreen"></iframe>
+        <div class="playable-frame" data-src="playables/petshop2/index.html" data-title="Pet Shop 2 playable ad">
+          <div class="playable-poster">
+            <div class="play-icon">▶</div>
+            <span>Nhấn để trải nghiệm</span>
+          </div>
         </div>
       </article>
       <article class="playable-card reveal">
@@ -1532,9 +1589,11 @@
           <a class="btn-store btn-android" href="playables/spashop/index.html" target="_blank"
             rel="noopener">Chơi toàn màn hình ↗</a>
         </div>
-        <div class="playable-frame">
-          <iframe src="playables/spashop/index.html" title="Spa Shop playable ad" loading="lazy"
-            allow="autoplay; fullscreen"></iframe>
+        <div class="playable-frame" data-src="playables/spashop/index.html" data-title="Spa Shop playable ad">
+          <div class="playable-poster">
+            <div class="play-icon">▶</div>
+            <span>Nhấn để trải nghiệm</span>
+          </div>
         </div>
       </article>
     </section>
@@ -1631,6 +1690,42 @@
     /* Scroll reveal */
     const obs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible') }), { threshold: 0.1 });
     document.querySelectorAll('.reveal,.reveal-children').forEach(el => obs.observe(el));
+
+    /* Playable Ads: load on click, one at a time, so their audio never overlaps */
+    let activePlayableFrame = null;
+
+    function stopPlayable(frameEl) {
+      const iframe = frameEl.querySelector('iframe');
+      if (iframe) iframe.remove();
+      frameEl.classList.remove('playing');
+      if (activePlayableFrame === frameEl) activePlayableFrame = null;
+    }
+
+    function startPlayable(frameEl) {
+      if (activePlayableFrame === frameEl) return;
+      if (activePlayableFrame) stopPlayable(activePlayableFrame);
+      const iframe = document.createElement('iframe');
+      iframe.src = frameEl.dataset.src;
+      iframe.title = frameEl.dataset.title || '';
+      iframe.loading = 'lazy';
+      iframe.setAttribute('allow', 'autoplay; fullscreen');
+      frameEl.appendChild(iframe);
+      frameEl.classList.add('playing');
+      activePlayableFrame = frameEl;
+    }
+
+    const playableFrames = document.querySelectorAll('.playable-frame[data-src]');
+    playableFrames.forEach(frameEl => {
+      frameEl.querySelector('.playable-poster').addEventListener('click', () => startPlayable(frameEl));
+    });
+
+    /* Stop audio automatically once the playing frame scrolls out of view */
+    const playableVisibilityObs = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting && entry.target === activePlayableFrame) stopPlayable(entry.target);
+      });
+    }, { threshold: 0 });
+    playableFrames.forEach(frameEl => playableVisibilityObs.observe(frameEl));
 
     /* Data */
     let allStore = [];
