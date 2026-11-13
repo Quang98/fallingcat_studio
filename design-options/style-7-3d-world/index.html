@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="description" content="QuangDM — Lead Game Developer, mobile games và playable ads trong một thế giới portfolio 3D.">
+  <meta name="theme-color" content="#060816">
+  <title>QuangDM — 3D World</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <a class="skip-link" href="#station-0">Bỏ qua điều hướng</a>
+  <div class="space" aria-hidden="true"><div class="nebula"></div><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div></div>
+
+  <header class="topbar">
+    <button class="brand" type="button" data-go="0" aria-label="Về trang đầu">
+      <span class="brand-cube" aria-hidden="true"><i>Q</i></span>
+      <span>FALLING CAT <b>STUDIO</b></span>
+    </button>
+    <div class="world-state" aria-live="polite"><span id="station-number">01</span><i></i><span id="station-name">Khởi hành</span></div>
+    <button class="soundless" type="button" id="help-toggle" aria-expanded="false" aria-controls="help-panel">Điều khiển <span>?</span></button>
+  </header>
+
+  <aside class="help-panel" id="help-panel" hidden>
+    <b>Di chuyển trong thế giới</b>
+    <p>Cuộn chuột, kéo, vuốt hoặc dùng phím ← →. Chọn một trạm trên dock để bay thẳng tới đó.</p>
+  </aside>
+
+  <main class="viewport" id="viewport">
+    <div class="scene" id="scene">
+      <div class="world" id="world">
+        <section class="station hero-station" id="station-0" data-title="Khởi hành" aria-labelledby="hero-title">
+          <div class="panel-glow"></div>
+          <div class="hero-copy">
+            <p class="eyebrow"><span></span> Available for collaboration</p>
+            <p class="mono">XIN CHÀO, TÔI LÀ</p>
+            <h1 id="hero-title">QUANG<span>DM</span></h1>
+            <h2>GAME DEVELOPER</h2>
+            <p class="lede">Lead Game Developer tại VTC Intecom. Tôi tạo ra những trải nghiệm game chỉn chu và đưa chúng đến với người chơi trên Android và iOS.</p>
+            <div class="actions"><button class="primary" type="button" data-go="2">Xem dự án <span>→</span></button><button type="button" data-go="7">Bắt đầu trao đổi ↗</button></div>
+            <div class="socials"><a href="https://www.linkedin.com/in/quang-đào-977215205" target="_blank" rel="noopener">LinkedIn</a><a href="https://www.facebook.com/bieu.quang" target="_blank" rel="noopener">Facebook</a><a href="mailto:daoquang.nvm@gmail.com">Email</a><a href="tel:0973805544">Phone</a></div>
+          </div>
+          <div class="hero-object" aria-label="Arcane Hunter — featured release">
+            <div class="portal-rings" aria-hidden="true"><i></i><i></i><i></i></div>
+            <img src="../../logothumbnail/Logo_ArcaneHunter.png" alt="Arcane Hunter: Soul Survivor">
+            <p><span>FEATURED RELEASE</span><b>Arcane Hunter</b></p>
+            <div class="role-chip"><span>Hiện tại</span><b>Lead Developer</b><small>VTC Intecom · Hà Nội, VN</small></div>
+          </div>
+        </section>
+
+        <section class="station" id="station-1" data-title="Giới thiệu" aria-labelledby="about-title">
+          <header class="station-head"><div><span>01</span><small>ABOUT</small></div><h2 id="about-title">Từ Ý Tưởng<br><em>Đến Người Chơi</em></h2><p>Gameplay tốt bắt đầu từ cảm giác điều khiển — và kết thúc bằng một sản phẩm được hoàn thiện.</p></header>
+          <div class="about-layout">
+            <div class="about-statement"><p>Tôi xây dựng game với sự cân bằng giữa <strong>kỹ thuật, cảm giác chơi</strong> và mục tiêu sản phẩm.</p><small>Từ prototype đầu tiên đến bản build phát hành, tôi theo sát toàn bộ vòng đời dự án để mỗi quyết định kỹ thuật đều phục vụ trải nghiệm người chơi.</small></div>
+            <div class="about-cards">
+              <article><b>01</b><h3>Game Development</h3><p>Phát triển trải nghiệm game với trọng tâm là gameplay rõ ràng, cảm giác điều khiển tốt và khả năng hoàn thiện sản phẩm.</p></article>
+              <article><b>02</b><h3>Mobile</h3><p>Xây dựng và phát hành sản phẩm cho thiết bị di động, hướng đến trải nghiệm mượt mà trên Android và iOS.</p></article>
+              <article><b>03</b><h3>Product</h3><p>Theo sát vòng đời dự án từ ý tưởng, phát triển, thử nghiệm cho đến khi sản phẩm đến tay người chơi.</p></article>
+            </div>
+          </div>
+        </section>
+
+        <section class="station" id="station-2" data-title="Nổi bật" aria-labelledby="featured-title">
+          <header class="station-head compact"><div><span>02</span><small>SELECTED</small></div><h2 id="featured-title">Dự Án <em>Nổi Bật</em></h2><p>Ba sản phẩm tiêu biểu, từ action RPG sinh tồn đến hệ thống merge chiến thuật.</p></header>
+          <div class="featured-stage" id="featured-stage"></div>
+          <div class="pager featured-pager" aria-label="Chọn dự án nổi bật"></div>
+        </section>
+
+        <section class="station" id="station-3" data-title="Dự án" aria-labelledby="projects-title">
+          <header class="station-head compact"><div><span>03</span><small>PORTFOLIO</small></div><h2 id="projects-title">Dự Án <em>Đã Tham Gia</em></h2><p>Danh mục sản phẩm đã phát hành trên Android và iOS.</p></header>
+          <div class="toolbar"><div class="tabs" role="tablist" aria-label="Nền tảng"><button class="active" type="button" role="tab" aria-selected="true" data-platform="android">Android</button><button type="button" role="tab" aria-selected="false" data-platform="ios">iOS</button></div><span id="store-count"></span></div>
+          <div class="store-grid" id="store-grid"></div>
+          <div class="collection-nav"><button type="button" data-page-prev="store" aria-label="Trang game trước">←</button><span id="store-page"></span><button type="button" data-page-next="store" aria-label="Trang game sau">→</button></div>
+        </section>
+
+        <section class="station" id="station-4" data-title="Kỹ năng" aria-labelledby="skills-title">
+          <header class="station-head"><div><span>04</span><small>TOOLKIT</small></div><h2 id="skills-title">Công Cụ &amp;<br><em>Công Nghệ</em></h2><p>Bộ công cụ phục vụ game mobile, playable ads và backend nhẹ.</p></header>
+          <div class="skills-layout">
+            <div class="core"><span>03</span><div><b>Năng lực cốt lõi</b><p>Công cụ chỉ là phương tiện. Điều quan trọng là chọn đúng nền tảng để prototype nhanh, vận hành ổn định và đưa sản phẩm đến tay người chơi.</p></div></div>
+            <div class="skill-stack"><article><i>U3D</i><div><small>GAME ENGINE</small><h3>Unity</h3><p>Mobile game development · Android &amp; iOS</p></div><b>01</b></article><article><i>CC</i><div><small>PLAYABLE</small><h3>Cocos Creator</h3><p>HTML5 games · Interactive creatives</p></div><b>02</b></article><article><i>CF</i><div><small>BACKEND</small><h3>Cloudflare Workers</h3><p>Edge functions · Lightweight services</p></div><b>03</b></article></div>
+          </div>
+        </section>
+
+        <section class="station" id="station-5" data-title="Kinh nghiệm" aria-labelledby="experience-title">
+          <header class="station-head compact"><div><span>05</span><small>CAREER</small></div><h2 id="experience-title">Kinh Nghiệm <em>Làm Việc</em></h2><p>Hành trình từ game developer độc lập đến vai trò lead.</p></header>
+          <div class="timeline">
+            <article><time>08/2020 – 01/2021</time><span>01</span><h3>Game Developer</h3><p>VDC Game</p></article>
+            <article><time>01/2021 – 01/2023</time><span>02</span><h3>Freelancer</h3><p>Độc lập</p></article>
+            <article><time>02/2023 – 02/2024</time><span>03</span><h3>Game Developer</h3><p>Apero Game Studio</p></article>
+            <article class="current"><time>02/2024 – Hiện tại</time><span>04</span><h3>Lead Developer</h3><p>VTC Intecom</p><b>● CURRENT</b></article>
+          </div>
+        </section>
+
+        <section class="station" id="station-6" data-title="Playables" aria-labelledby="playables-title">
+          <header class="station-head compact"><div><span>06</span><small>INTERACTIVE</small></div><h2 id="playables-title">Playable <em>Ads</em></h2><p>06 playable · Unity &amp; Cocos Creator · HTML5. Trải nghiệm trực tiếp hoặc mở toàn màn hình.</p></header>
+          <div class="playable-deck" id="playable-deck"></div>
+          <div class="collection-nav"><button type="button" data-page-prev="playable" aria-label="Playable trước">←</button><span id="playable-page"></span><button type="button" data-page-next="playable" aria-label="Playable sau">→</button></div>
+        </section>
+
+        <section class="station contact-station" id="station-7" data-title="Liên hệ" aria-labelledby="contact-title">
+          <header class="station-head"><div><span>07</span><small>CONTACT</small></div><h2 id="contact-title">Cùng Xây Dựng<br><em>Sản Phẩm Tiếp Theo</em></h2><p>Tôi luôn sẵn sàng cho các cơ hội hợp tác, freelance hoặc dự án mới. Có ý tưởng, cơ hội hợp tác hoặc chỉ muốn chào nhau? Kết nối với tôi.</p></header>
+          <div class="contact-layout">
+            <div class="contact-cta"><span>AVAILABLE FOR COLLABORATION</span><h3>Bắt Đầu Một<br>Cuộc Trò Chuyện</h3><a class="primary" href="mailto:daoquang.nvm@gmail.com">Liên hệ ngay ↗</a></div>
+            <div class="contact-grid"><a href="https://www.linkedin.com/in/quang-đào-977215205" target="_blank" rel="noopener"><small>LinkedIn</small><b>linkedin.com/in/quang-đào-977215205</b><span>↗</span></a><a href="https://www.facebook.com/bieu.quang" target="_blank" rel="noopener"><small>Facebook</small><b>facebook.com/bieu.quang</b><span>↗</span></a><a href="tel:0973805544"><small>Điện thoại</small><b>0973 805 544</b><span>↗</span></a><a href="mailto:daoquang.nvm@gmail.com"><small>Gmail</small><b>daoquang.nvm@gmail.com</b><span>↗</span></a></div>
+          </div>
+          <p class="copyright">© 2026 QuangDM · Game Developer Portfolio</p>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <nav class="dock" aria-label="Các trạm portfolio">
+    <button class="active" type="button" data-go="0"><span>01</span><b>Home</b></button><button type="button" data-go="1"><span>02</span><b>About</b></button><button type="button" data-go="2"><span>03</span><b>Featured</b></button><button type="button" data-go="3"><span>04</span><b>Projects</b></button><button type="button" data-go="4"><span>05</span><b>Skills</b></button><button type="button" data-go="5"><span>06</span><b>Career</b></button><button type="button" data-go="6"><span>07</span><b>Playables</b></button><button type="button" data-go="7"><span>08</span><b>Contact</b></button>
+  </nav>
+  <div class="step-controls"><button type="button" id="prev-station" aria-label="Trạm trước">←</button><span><b id="current-step">01</b> / 08</span><button type="button" id="next-station" aria-label="Trạm tiếp theo">→</button></div>
+  <p class="gesture-hint" id="gesture-hint">KÉO ĐỂ KHÁM PHÁ <span>↔</span></p>
+
+  <dialog id="game-modal">
+    <div class="modal-shell"><header><p><small>PLAYABLE AD</small><b id="modal-title">Preview</b></p><button type="button" class="modal-close" aria-label="Đóng">×</button></header><iframe title="Playable ad" allow="autoplay; fullscreen"></iframe></div>
+  </dialog>
+  <script src="app.js"></script>
+</body>
+</html>

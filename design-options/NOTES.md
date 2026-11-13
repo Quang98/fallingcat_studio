@@ -42,6 +42,16 @@ Mở `design-options/index.html` bằng trình duyệt để xem gallery, sau đ
 - Motion: blob morph chậm, reveal blur-to-focus và card float.
 - Art: `style-5-aurora-glass/art/aurora-mesh.svg`.
 
+## 07 — 3D World
+
+- Mood: trạm không gian tương lai, chiều sâu kiểu hologram và một vòng gallery 3D tám mặt.
+- Fonts: Outfit + Space Mono.
+- Palette: space `#060816`, violet `#8b7cff`, cyan `#43e7e0`, pink `#ff6fcf`, lime `#c9ff66`.
+- Navigation: dock, click panel, kéo/vuốt, phím mũi tên và mouse wheel theo từng trạm; toàn trang cố định trong `100dvh`, không có page scroll.
+- Collections: Featured, store Android/iOS và Playable Ads dùng carousel/pagination trong trạm để luôn vừa màn hình.
+- Accessibility: nội dung và link là DOM thật; có trạng thái focus, modal iframe, `prefers-reduced-motion` và flat paged fallback nếu CSS 3D không khả dụng.
+- Art: `style-7-3d-world/art/starmap.svg`.
+
 ## Shared behavior
 
 `base.css` cung cấp responsive foundation; `app.js` giữ nội dung và behavior chung để năm concept không lệch dữ liệu. Các trang có menu mobile, tab Android/iOS, modal playable ads, lazy-loaded thumbnail, focusable links/buttons và fallback store data khi chạy offline.
@@ -54,3 +64,14 @@ Mở `design-options/index.html` bằng trình duyệt để xem gallery, sau đ
 ## Trang chính hiện tại
 
 Trang chính (`../index.html`) dùng style **Sticker Playground** (`style-2-sticker-playground/`), được gộp thành một file duy nhất; art nằm trong `../art/sticker-doodles.svg`.
+
+## 08 — 3D Sticker
+
+- Mood: Sticker Playground trong một căn phòng 3D sáng, với card giấy nổi, viền navy chunky và bóng đổ cứng.
+- Fonts: Baloo 2 + Nunito.
+- Palette: cream `#fff9e9`, ink `#252037`, pink `#ff6fae`, yellow `#ffd74a`, aqua `#6ed5e7`, green `#82dc91`.
+- Navigation: vòng tám trạm 3D, dock sticker, panel lân cận có thể bấm, wheel từng bước, kéo/vuốt và phím mũi tên/Home/End; không có cuộn dọc trang.
+- Collections: Featured, Android/iOS projects và Playable Ads có phân trang nội bộ; playable mở trong dialog hoặc tab toàn màn hình.
+- Motion: chuyển trạm với easing nảy, doodle nhiều lớp có parallax; tự chuyển sang giao diện phẳng khi thiếu CSS 3D hoặc khi người dùng bật reduced motion.
+- Responsive: toàn bộ nội dung nằm trong viewport, doodle luôn sau content và được ẩn/thu nhỏ trên màn hình hẹp.
+- Art: `style-8-3d-sticker/art/cloud-sticker.svg` và `style-8-3d-sticker/art/world-doodles.svg`.
