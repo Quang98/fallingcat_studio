@@ -116,7 +116,7 @@ document.querySelector('#viewport').addEventListener('pointerdown', event => {
   pointerStart = {x:event.clientX,y:event.clientY,id:event.pointerId};
   dragged = false;
   event.currentTarget.setPointerCapture(event.pointerId);
-  world.style.transition = 'none';
+  document.documentElement.classList.add('dragging');
 });
 document.querySelector('#viewport').addEventListener('pointermove', event => {
   if (!pointerStart || pointerStart.id !== event.pointerId) return;
@@ -128,7 +128,7 @@ function releasePointer(event) {
   if (!pointerStart || pointerStart.id !== event.pointerId) return;
   const deltaX = event.clientX - pointerStart.x;
   const deltaY = event.clientY - pointerStart.y;
-  world.style.removeProperty('transition');
+  document.documentElement.classList.remove('dragging');
   if (Math.abs(deltaX) > 38 && Math.abs(deltaX) > Math.abs(deltaY)) step(deltaX < 0 ? 1 : -1);
   else root.style.setProperty('--turn', `${orbitIndex * -45}deg`);
   pointerStart = null;
