@@ -57,7 +57,7 @@
       <article class="job current reveal"><div class="job-dot"></div><div class="job-date">02/2024 – Hiện tại</div><div class="job-main"><div><h3>Lead Developer</h3><div class="job-org">VTC Intecom</div></div><span class="job-status">Current</span></div></article>
     </div></div></section>
 
-    <section class="section" id="playables"><div class="wrap"><header class="section-head reveal"><div class="section-index">06 / INTERACTIVE</div><h2 class="section-title">Playable<br>Ads</h2><p class="section-side">06 playable · Unity &amp; Cocos Creator · HTML5</p></header><div class="rule"></div><p class="playable-intro reveal">Các mẫu quảng cáo tương tác định dạng dọc. Trải nghiệm trực tiếp ngay trong khung hoặc mở ở chế độ toàn màn hình.</p><div class="playable-stack" id="playable-stack"></div></div></section>
+    <section class="section" id="playables"><div class="wrap"><header class="section-head reveal"><div class="section-index">06 / INTERACTIVE</div><h2 class="section-title">Playable<br>Ads</h2><p class="section-side">05 playable · Unity · HTML5</p></header><div class="rule"></div><p class="playable-intro reveal">Các mẫu quảng cáo tương tác định dạng dọc. Trải nghiệm trực tiếp ngay trong khung hoặc mở ở chế độ toàn màn hình.</p><div class="playable-stack" id="playable-stack"></div></div></section>
 
     <section class="cta"><div class="wrap"><div class="cta-box reveal"><div class="eyebrow">Hợp tác</div><h2>Cùng Xây Dựng Sản Phẩm Tiếp Theo</h2><p>Tôi luôn sẵn sàng cho các cơ hội hợp tác, freelance hoặc dự án mới. Hãy liên hệ nếu bạn muốn trao đổi thêm.</p><a class="btn btn-primary" href="#contact">Liên hệ ngay ↗</a></div></div></section>
 
@@ -85,9 +85,8 @@
     async function loadGames(){try{const r=await fetch('../../games_store.json');if(!r.ok)throw Error();games=await r.json()}catch(e){games=FALLBACK_GAMES}renderGames('android')}
     document.querySelectorAll('.tab').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(t=>{t.classList.remove('active');t.setAttribute('aria-selected','false')});btn.classList.add('active');btn.setAttribute('aria-selected','true');renderGames(btn.dataset.platform)}));
     const PLAYABLES=[
-      ['Cocos Creator · HTML5','Arcane Hunter','Một mẫu quảng cáo tương tác định dạng dọc. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','arcane-hunter'],
-      ['Unity · HTML5','Match3','Một mẫu quảng cáo tương tác thể loại match-3. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','match3'],
-      ['Unity · HTML5','Bubble Shooter','Một mẫu quảng cáo tương tác thể loại bắn bóng. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','bubbleshooter'],
+      ['Unity Playworks · HTML5','Arcane Hunter 1','Một mẫu quảng cáo tương tác cho Arcane Hunter: Soul Survivor, làm bằng Unity Playworks. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','arcane-hunter-1'],
+      ['Unity Playworks · HTML5','Arcane Hunter 2','Một mẫu quảng cáo tương tác khác cho Arcane Hunter: Soul Survivor, làm bằng Unity Playworks. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','arcane-hunter-2'],
       ['Unity · HTML5','Pet Shop','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng thú cưng. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','petshop'],
       ['Unity · HTML5','Pet Shop 2','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng thú cưng, phiên bản mới. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','petshop2'],
       ['Unity · HTML5','Spa Shop','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng spa thú cưng. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','spashop']
