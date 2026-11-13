@@ -27,8 +27,8 @@ button,a{font:inherit}button{color:inherit}a{color:inherit}button:focus-visible,
 .help-panel{position:fixed;z-index:40;right:clamp(16px,3vw,48px);top:76px;width:min(330px,calc(100vw - 32px));padding:18px 20px;border:1px solid var(--line);border-radius:15px;background:rgba(9,12,28,.94);box-shadow:0 20px 80px #0008;backdrop-filter:blur(20px)}.help-panel b{font-size:13px}.help-panel p{margin:6px 0 0;color:var(--muted);font-size:12px}
 .viewport{position:fixed;inset:0;overflow:hidden;perspective:1500px;perspective-origin:50% 47%}
 .scene{position:absolute;inset:clamp(72px,9vh,100px) 0 clamp(94px,13vh,128px);transform-style:preserve-3d}
-.world{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--radius) * -1)) rotateY(var(--turn));transition:transform 1.05s var(--ease)}
-.station{--i:0;position:absolute;left:50%;top:50%;width:min(1120px,82vw);height:min(680px,72vh);padding:clamp(24px,3vw,46px);overflow:hidden;transform:translate(-50%,-50%) rotateY(calc(var(--i) * 45deg)) translateZ(var(--radius));transform-style:preserve-3d;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,rgba(17,22,52,.88),rgba(7,10,28,.74));box-shadow:0 35px 100px rgba(0,0,0,.5),0 0 80px rgba(90,80,255,.08) inset;backdrop-filter:blur(16px);opacity:.16;filter:saturate(.5) blur(1px);transition:opacity .6s,filter .6s,border-color .6s;cursor:pointer}
+.world{position:absolute;inset:0;transform-style:preserve-3d;transform:translateZ(calc(var(--radius) * -1))}
+.station{--i:0;position:absolute;left:50%;top:50%;width:min(1120px,82vw);height:min(680px,72vh);padding:clamp(24px,3vw,46px);overflow:hidden;transform:translate(-50%,-50%) rotateY(calc(var(--i) * 45deg + var(--turn))) translateZ(var(--radius));transform-style:preserve-3d;border:1px solid var(--line);border-radius:28px;background:linear-gradient(145deg,rgba(17,22,52,.88),rgba(7,10,28,.74));box-shadow:0 35px 100px rgba(0,0,0,.5),0 0 80px rgba(90,80,255,.08) inset;backdrop-filter:blur(16px);opacity:.16;filter:saturate(.5) blur(1px);transition:opacity .6s,filter .6s,border-color .6s;cursor:pointer}
 .station:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(120deg,rgba(255,255,255,.045),transparent 30% 70%,rgba(67,231,224,.03));pointer-events:none}.station.active{opacity:1;filter:none;border-color:rgba(142,158,255,.4);cursor:default}.station.near{opacity:.35;filter:saturate(.75)}
 .station>*{position:relative}.station:not(.active) a,.station:not(.active) button{pointer-events:none}
 .station:nth-child(1){--i:0}.station:nth-child(2){--i:1}.station:nth-child(3){--i:2}.station:nth-child(4){--i:3}.station:nth-child(5){--i:4}.station:nth-child(6){--i:5}.station:nth-child(7){--i:6}.station:nth-child(8){--i:7}
@@ -80,7 +80,7 @@ button,a{font-family:inherit}button:focus-visible,a:focus-visible{outline:4px so
 .cloud-a{left:3%;top:13%;transform:translate(calc(var(--px) * -.45),calc(var(--py) * -.4)) rotate(-7deg)}
 .cloud-b{right:2%;bottom:13%;transform:translate(calc(var(--px) * .5),calc(var(--py) * .45)) rotate(8deg) scale(.78)}
 .viewport{z-index:1;perspective:1550px;perspective-origin:50% 47%}
-.world{transition:transform .92s var(--ease)}
+.station{transition:transform .92s var(--ease),opacity .6s,filter .6s,border-color .6s}.dragging .station{transition:opacity .6s,filter .6s,border-color .6s}
 .topbar{color:var(--line)}
 .brand{gap:12px;color:var(--line);font:800 13px/1 'Baloo 2',sans-serif;letter-spacing:.07em}
 .brand b{color:var(--pink)}
@@ -141,7 +141,7 @@ dialog{color:var(--line)}dialog::backdrop{background:rgba(37,32,55,.75);backdrop
 @media(max-width:900px){.station{box-shadow:9px 10px 0 var(--line)}.dock{box-shadow:5px 5px 0 var(--line)}.doodle-front{opacity:.18}.cloud-a{top:8%}.cloud-b{bottom:10%}}
 @media(max-width:680px){.doodle-cloud{display:none}.doodle-sheet{width:130vw}.doodle-back{opacity:.2}.doodle-front{display:none}.paper-horizon{opacity:.36}.station{border-width:3px;box-shadow:6px 7px 0 var(--line);border-radius:22px}.station:after{font-size:42px;opacity:.6}.brand-cube{border-width:2px;box-shadow:3px 3px 0 var(--line)}.station-head>div small{padding:2px 5px;border-width:1.5px}.about-statement,.about-cards article,.store-card,.skill-stack article,.timeline article,.contact-grid a{border-width:2px;box-shadow:3px 3px 0 var(--line)}.feature-visual:before{border-width:3px;box-shadow:4px 4px 0 var(--line)}.feature-visual img{border-width:3px;box-shadow:5px 5px 0 var(--line)}.playable-orb{border-width:3px;box-shadow:5px 6px 0 var(--line)}.dock{border-width:2px;box-shadow:4px 4px 0 var(--line)}.dock button.active{box-shadow:inset 0 0 0 1.5px var(--line)}.contact-cta{padding:10px;border-width:2px;box-shadow:3px 3px 0 var(--line)}.actions button,.primary,.play-actions button,.play-actions a{border-width:2px;box-shadow:3px 3px 0 var(--line)}}
 @media(max-width:380px){.station{padding:16px}.scene{inset:58px 0 82px}.station-head,.station-head.compact{margin-bottom:9px}.station-head>p{font-size:9px}.socials a{font-size:8px;padding:2px 5px}.play-actions{gap:5px}.play-actions button,.play-actions a{padding:6px 7px}.store-card img{height:70px}.contact-layout{gap:8px}}
-@media(prefers-reduced-motion:reduce){.doodle{transform:none!important}.world{transition:none!important}}
+@media(prefers-reduced-motion:reduce){.doodle{transform:none!important}.station{transition:none!important}}
 </style>
 </head>
 <body>
@@ -378,7 +378,7 @@ document.querySelector('#viewport').addEventListener('pointerdown', event => {
   pointerStart = {x:event.clientX,y:event.clientY,id:event.pointerId};
   dragged = false;
   event.currentTarget.setPointerCapture(event.pointerId);
-  world.style.transition = 'none';
+  root.classList.add('dragging');
 });
 document.querySelector('#viewport').addEventListener('pointermove', event => {
   if (!pointerStart || pointerStart.id !== event.pointerId) return;
@@ -390,7 +390,7 @@ function releasePointer(event) {
   if (!pointerStart || pointerStart.id !== event.pointerId) return;
   const deltaX = event.clientX - pointerStart.x;
   const deltaY = event.clientY - pointerStart.y;
-  world.style.removeProperty('transition');
+  root.classList.remove('dragging');
   if (Math.abs(deltaX) > 38 && Math.abs(deltaX) > Math.abs(deltaY)) step(deltaX < 0 ? 1 : -1);
   else root.style.setProperty('--turn', `${orbitIndex * -45}deg`);
   pointerStart = null;
