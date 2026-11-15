@@ -20,7 +20,8 @@ const PLAYABLES = [
   ['Unity Playworks · HTML5','Arcane Hunter 2','Một mẫu quảng cáo tương tác khác cho Arcane Hunter: Soul Survivor, làm bằng Unity Playworks. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','arcane-hunter-2'],
   ['Unity · HTML5','Pet Shop','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng thú cưng. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','petshop'],
   ['Unity · HTML5','Pet Shop 2','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng thú cưng, phiên bản mới. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','petshop2'],
-  ['Unity · HTML5','Spa Shop','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng spa thú cưng. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','spashop']
+  ['Unity · HTML5','Spa Shop','Một mẫu quảng cáo tương tác thể loại quản lý cửa hàng spa thú cưng. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','spashop'],
+  ['Unity Playworks · HTML5','Happy Pet','Một mẫu quảng cáo tương tác thể loại chăm sóc thú cưng, làm bằng Unity Playworks. Bạn có thể trải nghiệm trực tiếp trong khung bên cạnh hoặc mở ở chế độ toàn màn hình.','happypet']
 ];
 
 const stations = [...document.querySelectorAll('.station')];
